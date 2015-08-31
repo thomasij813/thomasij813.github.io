@@ -6,7 +6,7 @@ relative_permalinks: true
 
 # Setup
 title:               Thomas Johnson
-tagline:             Free Poundcake
+tagline:
 url:                 thomasij813.github.io
 paginate:            1
 baseurl:             ""
@@ -28,3 +28,8 @@ author:
 version:             2.0.0
 github:
   repo:              https://github.com/poole/poole
+
+navbar_list:
+  About: "/about"
+  Archive: "/archive"
+  Contact: "/contact"
