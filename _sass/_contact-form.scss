@@ -1,15 +1,29 @@
+%flexbox {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+}
+
+%form-input{
+  width: 100%;
+  border: 2px solid #66C3FF;
+  transition: border 0.4s ease;
+  &:focus {
+    border: 2px solid darken(#66C3FF, 20%);
+    outline: none;
+  }
+}
+
 .contact-wrapper{
   max-width: 500px;
   margin: 0 auto;
 }
 
 .form-header {
+  @extend %flexbox;
   background-color: #2D2D34;
   height: 135px;
-  display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  -webkit-align-items: center;
   justify-content: center;
   -webkit-justify-content: center;
   h1 {
@@ -21,43 +35,29 @@
 }
 
 #contact_form {
+  @extend %flexbox;
   background-color: #FDFFFC;
-  display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  -webkit-align-items: center;
   flex-direction: column;
   -webkit-flex-direction: column;
+  padding: 40px 0;
   @media (min-width: 41em) {
-    padding: 0 45px;
+    padding: 40px 45px;
   }
   p {
     color: darken(#66C3FF, 20%);
     margin-bottom: 15px;
   }
   .email{
-    margin: 15px 0;
+    @extend %form-input;
+    margin-bottom: 15px;
     height: 60px;
-    width: 100%;
-    border: 2px solid #66C3FF;
     padding-left: 10px;
-    transition: border 0.4s ease;
-    &:focus {
-      border: 2px solid darken(#66C3FF, 20%);
-      outline: none;
-    }
   }
   .message{
+    @extend %form-input;
     height: 300px;
-    width: 100%;
-    border: 2px solid #66C3FF;
     padding-left: 10px;
     padding-top: 1px;
-    transition: border 0.4s ease;
-    &:focus {
-      border: 2px solid darken(#66C3FF, 20%);
-      outline: none;
-    }
   }
   .form-button{
     width: 100%;
