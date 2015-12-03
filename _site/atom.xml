@@ -4,7 +4,7 @@
  <title>Thomas Johnson</title>
  <link href="thomasij813.github.io/atom.xml" rel="self"/>
  <link href="thomasij813.github.io/"/>
- <updated>2015-12-02T21:21:37-08:00</updated>
+ <updated>2015-12-02T21:43:18-08:00</updated>
  <id>thomasij813.github.io</id>
  <author>
    <name>Thomas Johnson</name>
@@ -133,7 +133,7 @@
 
 &lt;p&gt;&lt;strong&gt;The reason this works is because &lt;code&gt;baz.bar&lt;/code&gt;, being a property on the object returned by &lt;code&gt;foo&lt;/code&gt;, has closure over &lt;code&gt;foo&lt;/code&gt;.&lt;/strong&gt; The upshot of this is that when &lt;code&gt;baz.bar&lt;/code&gt; gets invoked, the execution context slides momentarily back inside &lt;code&gt;bar&lt;/code&gt;, meaning that &lt;code&gt;baz.bar&lt;/code&gt; can call any variables that &lt;code&gt;bar&lt;/code&gt; had access to as a function nested inside &lt;code&gt;foo&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;This might give you the impression that &lt;code&gt;baz.bar&lt;/code&gt; is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of &lt;code&gt;baz&lt;/code&gt; (ie, the &lt;code&gt;global&lt;/code&gt; scope). &lt;strong&gt;In truth, calling &lt;code&gt;baz.bar&lt;/code&gt; shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.&lt;/strong&gt; Go about your business, there’s nothing to see here.&lt;/p&gt;
+&lt;p&gt;This might give you the impression that &lt;code&gt;baz.bar&lt;/code&gt; is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of &lt;code&gt;baz&lt;/code&gt; (ie, the &lt;code&gt;global&lt;/code&gt; scope). &lt;strong&gt;In truth, calling &lt;code&gt;baz.bar&lt;/code&gt; shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;If you think this has something to do with the fact that &lt;code&gt;baz.bar&lt;/code&gt; is a method on the object returned by &lt;code&gt;foo&lt;/code&gt;, think again. The following code operates according to the same logic of closure:&lt;/p&gt;
 
@@ -224,6 +224,8 @@
 &lt;p&gt;In this example &lt;code&gt;updateUsername&lt;/code&gt; isn’t that interesting of a function. It seems kind of trivial that we would want to keep private a function that performs a pretty simple concatenation operation. But you can imagine scenarios where keeping functions private is anything but trivial.&lt;/p&gt;
 
 &lt;p&gt;What if instead of returning a small &lt;code&gt;profile&lt;/code&gt; object, we had a function that returned a huge public API, with tons of methods and data? It’s a safe bet that some of the methods that get returned in our public API rely on helper functions or variables that we don’t want the public to be able to access directly. In order for the methods that were returned by the API to work outside the context of their creation, we need a way to allow them to slide back into their original scope and look up those private methods. This is precisely what closure affords.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;**Note: for an extended discussion on the relation of closure to APIs and modules, see &lt;a href=&quot;https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;amp;%20closures/ch5.md#modules&quot;&gt;this&lt;/a&gt; section in Kyle Simpson’s &lt;a href=&quot;https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures&quot;&gt;You Don’t Know JS: Scope &amp;amp; Closure&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;wrapping-up&quot;&gt;Wrapping up&lt;/h3&gt;
 

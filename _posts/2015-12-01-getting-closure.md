@@ -127,7 +127,7 @@ Notice, however, that invoking `baz.bar` executes correctly. Given our knowledge
 
 **The reason this works is because `baz.bar`, being a property on the object returned by `foo`, has closure over `foo`.** The upshot of this is that when `baz.bar` gets invoked, the execution context slides momentarily back inside `bar`, meaning that `baz.bar` can call any variables that `bar` had access to as a function nested inside `foo`.
 
-This might give you the impression that `baz.bar` is breaking the "rules" of scope by being able to reference variables that aren't within the current execution context of `baz` (ie, the `global` scope). **In truth, calling `baz.bar` shifts the execution context, so to speak, so no "rules" are being broken here, and lookups get performed just as would be expected.** Go about your business, there's nothing to see here.
+This might give you the impression that `baz.bar` is breaking the "rules" of scope by being able to reference variables that aren't within the current execution context of `baz` (ie, the `global` scope). **In truth, calling `baz.bar` shifts the execution context, so to speak, so no "rules" are being broken here, and lookups get performed just as would be expected.**
 
 If you think this has something to do with the fact that `baz.bar` is a method on the object returned by `foo`, think again. The following code operates according to the same logic of closure:
 
@@ -222,6 +222,8 @@ They also change the `username` property by invoking `updateUsername`, a functio
 In this example `updateUsername` isn't that interesting of a function. It seems kind of trivial that we would want to keep private a function that performs a pretty simple concatenation operation. But you can imagine scenarios where keeping functions private is anything but trivial.
 
 What if instead of returning a small `profile` object, we had a function that returned a huge public API, with tons of methods and data? It's a safe bet that some of the methods that get returned in our public API rely on helper functions or variables that we don't want the public to be able to access directly. In order for the methods that were returned by the API to work outside the context of their creation, we need a way to allow them to slide back into their original scope and look up those private methods. This is precisely what closure affords.
+
+*\*\*Note: for an extended discussion on the relation of closure to APIs and modules, see [this](https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&%20closures/ch5.md#modules) section in Kyle Simpson's [You Don't Know JS: Scope & Closure](https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures)*
 
 ### Wrapping up
 

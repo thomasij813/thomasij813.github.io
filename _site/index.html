@@ -188,7 +188,7 @@
 
 <p><strong>The reason this works is because <code>baz.bar</code>, being a property on the object returned by <code>foo</code>, has closure over <code>foo</code>.</strong> The upshot of this is that when <code>baz.bar</code> gets invoked, the execution context slides momentarily back inside <code>bar</code>, meaning that <code>baz.bar</code> can call any variables that <code>bar</code> had access to as a function nested inside <code>foo</code>.</p>
 
-<p>This might give you the impression that <code>baz.bar</code> is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of <code>baz</code> (ie, the <code>global</code> scope). <strong>In truth, calling <code>baz.bar</code> shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.</strong> Go about your business, there’s nothing to see here.</p>
+<p>This might give you the impression that <code>baz.bar</code> is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of <code>baz</code> (ie, the <code>global</code> scope). <strong>In truth, calling <code>baz.bar</code> shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.</strong></p>
 
 <p>If you think this has something to do with the fact that <code>baz.bar</code> is a method on the object returned by <code>foo</code>, think again. The following code operates according to the same logic of closure:</p>
 
@@ -280,6 +280,8 @@
 
 <p>What if instead of returning a small <code>profile</code> object, we had a function that returned a huge public API, with tons of methods and data? It’s a safe bet that some of the methods that get returned in our public API rely on helper functions or variables that we don’t want the public to be able to access directly. In order for the methods that were returned by the API to work outside the context of their creation, we need a way to allow them to slide back into their original scope and look up those private methods. This is precisely what closure affords.</p>
 
+<p><em>**Note: for an extended discussion on the relation of closure to APIs and modules, see <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;%20closures/ch5.md#modules">this</a> section in Kyle Simpson’s <a href="https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures">You Don’t Know JS: Scope &amp; Closure</a></em></p>
+
 <h3 id="wrapping-up">Wrapping up</h3>
 
 <p>Hopefully by now you understand a little more about what closure is and why it’s important to JavaScript. It’s not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.</p>
@@ -303,7 +305,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2015-12-02T21:21:37-08:00">2015</time>. All rights reserved.
+          &copy; <time datetime="2015-12-02T21:43:18-08:00">2015</time>. All rights reserved.
         </small>
       </footer>
     </div>
