@@ -4,7 +4,7 @@
  <title>Thomas Johnson</title>
  <link href="thomasij813.github.io/atom.xml" rel="self"/>
  <link href="thomasij813.github.io/"/>
- <updated>2015-12-02T20:44:29-08:00</updated>
+ <updated>2015-12-02T21:21:37-08:00</updated>
  <id>thomasij813.github.io</id>
  <author>
    <name>Thomas Johnson</name>
@@ -50,7 +50,7 @@
 
 &lt;p&gt;That being understood, why then was &lt;code&gt;foo&lt;/code&gt; able to call &lt;code&gt;a&lt;/code&gt;? It seem’s like a contradiction to say that on one hand we are unable to look up &lt;code&gt;b&lt;/code&gt; from outside &lt;code&gt;foo&lt;/code&gt; because &lt;code&gt;foo&lt;/code&gt; is where &lt;code&gt;b&lt;/code&gt; was created, but on the other hand to say that &lt;code&gt;foo&lt;/code&gt; can totally look up &lt;code&gt;a&lt;/code&gt; even though &lt;code&gt;a&lt;/code&gt; wasn’t defined there. Both lookups refer to variables that were defined somewhere other than the execution context of the call, so why does JavaScript forbid one lookup but not the other?&lt;/p&gt;
 
-&lt;p&gt;The answer has less to do with what kind of lookups are forbidden and allowed by the JavaScript engine, and more with how that actual lookup process is performed. &lt;strong&gt;I’ll be honest and say that when I say scope is all about rules, I’m being a little misleading. In truth, it’s more appropriate to think of scope in terms of a constrained route the engine takes when it’s tasked with looking up variables.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The answer has less to do with what kind of lookups are forbidden and allowed by the JavaScript engine, and more with how that actual lookup process is performed. &lt;strong&gt;At this point, I should come clean about something: when I say scope is all about rules, I’m being a little misleading. In truth, it’s more appropriate to think of scope in terms of a constrained route the engine takes when it’s tasked with looking up variables.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;When you reference a variable in your code, the JavaScript engine takes a strongly specified path to look it up. First, it looks to see if the variable was added to the current scope, that is, it checks to see if that variable exists within the namespace of the current execution context (ie, function). If it doesn’t find the variable in the current namespace, it take one step backward and checks to see if the namespace of the parent scope contains the requested variable. If again the engine fails to find the variable there, it checks the namespace of the parent’s parent scope, and so on all the way to the &lt;code&gt;global&lt;/code&gt; scope.&lt;/p&gt;
 
