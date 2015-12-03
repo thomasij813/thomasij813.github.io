@@ -10,6 +10,7 @@ tagline:
 url:                 thomasij813.github.io
 paginate:            1
 baseurl:             ""
+highlighter:         rouge
 
 # Assets
 #

@@ -4,13 +4,234 @@
  <title>Thomas Johnson</title>
  <link href="thomasij813.github.io/atom.xml" rel="self"/>
  <link href="thomasij813.github.io/"/>
- <updated>2015-11-17T16:53:55-08:00</updated>
+ <updated>2015-12-02T20:44:29-08:00</updated>
  <id>thomasij813.github.io</id>
  <author>
    <name>Thomas Johnson</name>
    <email>thomasij813@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Getting Closure</title>
+   <link href="thomasij813.github.io/2015/12/01/getting-closure/"/>
+   <updated>2015-12-01T00:00:00-08:00</updated>
+   <id>thomasij813.github.io/2015/12/01/getting-closure</id>
+   <content type="html">&lt;p&gt;I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.&lt;/p&gt;
+
+&lt;p&gt;In this post, I’m going to try and explain the concept to the best of my abilities. This will by no means be a comprehensive explanation, and given my limited expertise I encourage readers to check out more authoritative sources before carrying whatever knowledge gained here into practice.&lt;/p&gt;
+
+&lt;p&gt;In particular, I highly recommend reading Kyle Simpson’s &lt;a href=&quot;https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;amp;%20closures/ch5.md&quot;&gt;chapter on closure&lt;/a&gt; from his excellent &lt;a href=&quot;https://github.com/getify/You-Dont-Know-JS&quot;&gt;You Don’t Know JS&lt;/a&gt; series and the relevant passages from Douglas Crockford’s classic, &lt;a href=&quot;http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742&quot;&gt;JavaScript: The Good Parts&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;lets-talk-about-scope&quot;&gt;Let’s talk about scope&lt;/h2&gt;
+
+&lt;p&gt;Before getting to closure, it’s important to understand what scope is and how it works.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Put simply, in JavaScript scope refers to the rules that the engine abides by when it performs variable lookups.&lt;/strong&gt; As you probably know, successfully looking up variables depends a lot on the namespaces they were assigned to and the context from which they are being looked up.&lt;/p&gt;
+
+&lt;p&gt;Most developers know that trying to reference variables that were defined within a function from beyond the context of that function will return an error. This is because the variables were scoped to the namespace of the function they were defined in, and trying to call these variables from outside that namespace is forbidden by JavaScript’s engine.&lt;/p&gt;
+
+&lt;p&gt;Take a look at the following code snippet:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to global!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to foo!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// I&#39;m scoped to global! I&#39;m scoped to foo!&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;When we invoke &lt;code&gt;foo&lt;/code&gt;, the engine steps inside the function to execute its code, so to speak. This means that while its executing &lt;code&gt;foo&lt;/code&gt;, the engine has access to all the variables mapped to that function’s namespace. For these reasons, &lt;code&gt;foo&lt;/code&gt; is able to log successfully both &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We run into problems when we attempt to log &lt;code&gt;b&lt;/code&gt; from outside of &lt;code&gt;foo&lt;/code&gt;. While it may seem strange that that the engine raises an error when we try to call &lt;code&gt;b&lt;/code&gt; just six lines after defining it, according to the rules of scope, &lt;code&gt;b&lt;/code&gt; is mapped to &lt;code&gt;foo&lt;/code&gt;’s namespace. Trying to access &lt;code&gt;b&lt;/code&gt; from outside the context of &lt;code&gt;foo&lt;/code&gt;’s namespace is just not possible.&lt;/p&gt;
+
+&lt;p&gt;That being understood, why then was &lt;code&gt;foo&lt;/code&gt; able to call &lt;code&gt;a&lt;/code&gt;? It seem’s like a contradiction to say that on one hand we are unable to look up &lt;code&gt;b&lt;/code&gt; from outside &lt;code&gt;foo&lt;/code&gt; because &lt;code&gt;foo&lt;/code&gt; is where &lt;code&gt;b&lt;/code&gt; was created, but on the other hand to say that &lt;code&gt;foo&lt;/code&gt; can totally look up &lt;code&gt;a&lt;/code&gt; even though &lt;code&gt;a&lt;/code&gt; wasn’t defined there. Both lookups refer to variables that were defined somewhere other than the execution context of the call, so why does JavaScript forbid one lookup but not the other?&lt;/p&gt;
+
+&lt;p&gt;The answer has less to do with what kind of lookups are forbidden and allowed by the JavaScript engine, and more with how that actual lookup process is performed. &lt;strong&gt;I’ll be honest and say that when I say scope is all about rules, I’m being a little misleading. In truth, it’s more appropriate to think of scope in terms of a constrained route the engine takes when it’s tasked with looking up variables.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;When you reference a variable in your code, the JavaScript engine takes a strongly specified path to look it up. First, it looks to see if the variable was added to the current scope, that is, it checks to see if that variable exists within the namespace of the current execution context (ie, function). If it doesn’t find the variable in the current namespace, it take one step backward and checks to see if the namespace of the parent scope contains the requested variable. If again the engine fails to find the variable there, it checks the namespace of the parent’s parent scope, and so on all the way to the &lt;code&gt;global&lt;/code&gt; scope.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;global&lt;/code&gt; scope happens to be the final namespace on the engine’s lookup path. It provides access to variables that were defined outside of any function or variables that were declared without the preceding keyword &lt;code&gt;var&lt;/code&gt;. There is no parent scope to &lt;code&gt;global&lt;/code&gt;, so if the engine reaches it all the way here without finding the variable it needs, it raises a reference error.&lt;/p&gt;
+
+&lt;p&gt;All functions and their namespaces, no matter how deeply nested, have access to the variables scoped to &lt;code&gt;global&lt;/code&gt;. As a result, it can be very tempting to define all of the variables you’ll ever need in the namespace of the &lt;code&gt;global&lt;/code&gt; scope. &lt;strong&gt;In truth, however, assigning variables to &lt;code&gt;global&lt;/code&gt; is rarely a good idea, and it should be avoided.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that we know a little more about scope, the answer to our question about why &lt;code&gt;foo&lt;/code&gt; was able to reference &lt;code&gt;a&lt;/code&gt; should be clear. Here’s the code snippet from earlier:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to global!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to foo!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// I&#39;m scoped to global! I&#39;m scoped to foo!&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;a&lt;/code&gt; was defined within the &lt;code&gt;global&lt;/code&gt; scope. When we invoke &lt;code&gt;foo&lt;/code&gt;, the engine is tasked with finding &lt;code&gt;a&lt;/code&gt;. When it fails to find it within &lt;code&gt;foo&lt;/code&gt;’s namespace, the engine takes a step backward and finds it in &lt;code&gt;foo&lt;/code&gt;’s parent, the &lt;code&gt;global&lt;/code&gt; scope.&lt;/p&gt;
+
+&lt;p&gt;Knowing how variables are looked up by the engine is important, and it allows us to better appreciate what the engine is doing to find variables. Before moving on to closure, however, I think it would serve our purpose to examine one more code snippet:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to foo!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to bar!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to baz!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// I&#39;m scoped to foo! I&#39;m scoped to bar!&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Before you continue reading, try and figure out why invoking &lt;code&gt;foo&lt;/code&gt; succeeded and invoking &lt;code&gt;baz&lt;/code&gt; failed. What path does the engine take to look up the variables these two functions reference?&lt;/p&gt;
+
+&lt;p&gt;As I mentioned earlier, it’s only somewhat correct to say that the reason invoking &lt;code&gt;baz&lt;/code&gt; raises an error when it attempts to log &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; is because the rules of scope forbid the engine from breaking the current execution context (which happens to be the function &lt;code&gt;baz&lt;/code&gt;) and accessing the namespaces of &lt;code&gt;foo&lt;/code&gt; and &lt;code&gt;bar&lt;/code&gt;, the functions where those variables are defined. It’s better to say that the reason has to do with the route the engine takes when it tries to find those variables, a route that &lt;code&gt;foo&lt;/code&gt; and &lt;code&gt;bar&lt;/code&gt; just aren’t on.&lt;/p&gt;
+
+&lt;p&gt;Following the variable lookup path helps reveal why &lt;code&gt;baz&lt;/code&gt; came up short when it tried calling &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt;. Tracing the lookup path taken by the engine when we invoke &lt;code&gt;foo&lt;/code&gt; also explains why that function was able to successfully look up the same variables.&lt;/p&gt;
+
+&lt;p&gt;The final line of &lt;code&gt;foo&lt;/code&gt; invokes &lt;code&gt;bar&lt;/code&gt;, a function nested inside &lt;code&gt;foo&lt;/code&gt; that logs the two variables. This means that invoking &lt;code&gt;foo&lt;/code&gt; pushes our execution context to &lt;code&gt;bar&lt;/code&gt;. Finding &lt;code&gt;b&lt;/code&gt; from inside &lt;code&gt;bar&lt;/code&gt; is easy for the JavaScript engine since that’s the function where &lt;code&gt;b&lt;/code&gt; was declared. The process the engine takes to find &lt;code&gt;a&lt;/code&gt;, however, is complicated by the fact that there is no variable named &lt;code&gt;a&lt;/code&gt; in &lt;code&gt;bar&lt;/code&gt;’s namespace. Upon finding this out, the engine consults the namespace of &lt;code&gt;bar&lt;/code&gt;’s parent scope, &lt;code&gt;foo&lt;/code&gt;, where there is a variable named &lt;code&gt;a&lt;/code&gt;. Hence, both variables are successfully able to be looked up by the engine and logged to the console.&lt;/p&gt;
+
+&lt;p&gt;We started this discussion by thinking about scope in terms of rules of access the engine follows when it performs variable lookups. We ended it, however, by demonstrating a subtle but important reformulation: &lt;strong&gt;scope is the constraining mechanism that binds the engine to a specified path of nested namespaces in order to complete variable lookups.&lt;/strong&gt; Starting with the scope of the current execution context, upon failing to find a variable the engine navigates backward consulting each parent scope until reaching the &lt;code&gt;global&lt;/code&gt; scope, ultimately either finding the variable it needs and returning its value or not and raising a reference error.&lt;/p&gt;
+
+&lt;h3 id=&quot;on-to-closure&quot;&gt;On to closure…&lt;/h3&gt;
+
+&lt;p&gt;Let’s take a look at another code snippet:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;I&#39;m scoped to bar!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// I&#39;m scoped to bar!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here we’ve created a function that returns an object. The object contains only one property, a method named &lt;code&gt;bar&lt;/code&gt; that happens to point to a function of the same name nested inside &lt;code&gt;foo&lt;/code&gt;. Trying to call &lt;code&gt;bar()&lt;/code&gt; from the execution context of the &lt;code&gt;global&lt;/code&gt; scope results in an error.&lt;/p&gt;
+
+&lt;p&gt;So far, none of this is surprising. When we try to invoke &lt;code&gt;bar&lt;/code&gt; from the &lt;code&gt;global&lt;/code&gt; scope, we are essentially trying to call a function that cannot be accessed by the engine. &lt;code&gt;bar&lt;/code&gt; is scoped to &lt;code&gt;foo&lt;/code&gt;, so trying to call &lt;code&gt;bar&lt;/code&gt; from the context of the &lt;code&gt;global&lt;/code&gt; scope, which is the parent of &lt;code&gt;foo&lt;/code&gt;, will fail. &lt;strong&gt;Remember, when the engine can’t find something in the namespace of the current execution context, it starts looking in the namespace of each parent scope.&lt;/strong&gt; The &lt;code&gt;global&lt;/code&gt; scope doesn’t have any parents, so when the engine fails to find &lt;code&gt;bar&lt;/code&gt; in the &lt;code&gt;global&lt;/code&gt; namespace, it’s forced to return an error.&lt;/p&gt;
+
+&lt;p&gt;Notice, however, that invoking &lt;code&gt;baz.bar&lt;/code&gt; executes correctly. Given our knowledge of scope, this should raise an important question: why is it that calling a method from the &lt;code&gt;global&lt;/code&gt; scope that happens to point to &lt;code&gt;bar&lt;/code&gt; succeeds and just calling &lt;code&gt;bar&lt;/code&gt; directly fails? Aren’t both of these invocations performing lookups on a function that is defined in a namespace that cannot be reached from &lt;code&gt;global&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The reason this works is because &lt;code&gt;baz.bar&lt;/code&gt;, being a property on the object returned by &lt;code&gt;foo&lt;/code&gt;, has closure over &lt;code&gt;foo&lt;/code&gt;.&lt;/strong&gt; The upshot of this is that when &lt;code&gt;baz.bar&lt;/code&gt; gets invoked, the execution context slides momentarily back inside &lt;code&gt;bar&lt;/code&gt;, meaning that &lt;code&gt;baz.bar&lt;/code&gt; can call any variables that &lt;code&gt;bar&lt;/code&gt; had access to as a function nested inside &lt;code&gt;foo&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This might give you the impression that &lt;code&gt;baz.bar&lt;/code&gt; is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of &lt;code&gt;baz&lt;/code&gt; (ie, the &lt;code&gt;global&lt;/code&gt; scope). &lt;strong&gt;In truth, calling &lt;code&gt;baz.bar&lt;/code&gt; shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.&lt;/strong&gt; Go about your business, there’s nothing to see here.&lt;/p&gt;
+
+&lt;p&gt;If you think this has something to do with the fact that &lt;code&gt;baz.bar&lt;/code&gt; is a method on the object returned by &lt;code&gt;foo&lt;/code&gt;, think again. The following code operates according to the same logic of closure:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;I&#39;ve been scoped to foo!&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// returns a pointer to the function object bar and assigns it to baz&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;baz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// I&#39;ve been scoped to foo!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;a&lt;/code&gt; and &lt;code&gt;bar&lt;/code&gt; are both scoped to &lt;code&gt;foo&lt;/code&gt;’s namespace, so attempting to call them from the &lt;code&gt;global&lt;/code&gt; scope results in an error. &lt;code&gt;baz&lt;/code&gt;, on the other hand, is assigned to the result of invoking &lt;code&gt;foo&lt;/code&gt;, meaning that &lt;code&gt;baz&lt;/code&gt; points to &lt;code&gt;bar&lt;/code&gt;. Just like in our earlier example when I said that &lt;code&gt;baz.bar&lt;/code&gt; had closure over &lt;code&gt;foo&lt;/code&gt;, here &lt;code&gt;bar&lt;/code&gt; also has closure over &lt;code&gt;foo&lt;/code&gt;. This means that invoking &lt;code&gt;baz&lt;/code&gt; in turn invokes &lt;code&gt;bar&lt;/code&gt;, and this, speaking a little crudely, &lt;strong&gt;is what slides the execution context back inside &lt;code&gt;bar&lt;/code&gt;, a subtle maneuver affording the engine a variable lookup path on which it can locate &lt;code&gt;a&lt;/code&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In both these examples, &lt;code&gt;bar&lt;/code&gt; has closure over &lt;code&gt;foo&lt;/code&gt;, the function it was created in. And since &lt;code&gt;foo&lt;/code&gt; returned &lt;code&gt;bar&lt;/code&gt;—as either a method on an object or directly itself—in a certain fashion &lt;code&gt;bar&lt;/code&gt; can continue to live on and function even outside &lt;code&gt;foo&lt;/code&gt;’s scope.&lt;/p&gt;
+
+&lt;h3 id=&quot;privacy&quot;&gt;Privacy&lt;/h3&gt;
+
+&lt;p&gt;If you understand closure and it doesn’t seem surprising to you, congratulations, you must have an excellent understanding of scope. Being able to intuitively determine how context shifts as code gets executed and how variables are looked up according to the scoping mechanism are the prerequisites to understanding and employing closure. &lt;strong&gt;When these things become second nature, so too will the idea of closure.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;With that said, it’s worthwhile to dwell on the powerful functionality that closure affords. &lt;strong&gt;Because closure allows us to reference variables scoped to namespaces we otherwise could not access, it’s very easy to write code whose execution relies on private resources.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Consider the following code snippet:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createProfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;updateUsername&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;changeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;newName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;newName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;updateUsername&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;changeYearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;newYearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;newYearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;updateUsername&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;updateUsername&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;changeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;changeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;changeYearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;changeYearOfBirth&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;createProfile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Franklin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1988&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// Franklin;&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 1988&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// Frankl1988&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;// error&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;changeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Montgomery&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;changeYearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1950&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// Montgomery&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;yearOfBirth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 1950&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;profile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// Montgo1950&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this example, I have created a &lt;code&gt;createProfile&lt;/code&gt; function that takes as arguments a name and a year of birth and returns a &lt;code&gt;profile&lt;/code&gt; object. The &lt;code&gt;profile&lt;/code&gt; object contains five properties, two of which are assigned to whatever name and year of birth that was originally passed to the &lt;code&gt;createProfile&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;p&gt;The property &lt;code&gt;username&lt;/code&gt; is set to a string that is created as the result of passing &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;yearOfBirth&lt;/code&gt; to the &lt;code&gt;updateUsername&lt;/code&gt; function. &lt;strong&gt;Notice that &lt;code&gt;username&lt;/code&gt; is not set to the function &lt;code&gt;updateUsername&lt;/code&gt;; instead it’s set to the result of invoking &lt;code&gt;updateUsername&lt;/code&gt;.&lt;/strong&gt; If you tried to invoke &lt;code&gt;username&lt;/code&gt; as a property of &lt;code&gt;profile&lt;/code&gt; you would receive an error because &lt;code&gt;profile.username&lt;/code&gt; is not a function. It’s just a string.&lt;/p&gt;
+
+&lt;p&gt;Unlike &lt;code&gt;username&lt;/code&gt;, the properties &lt;code&gt;changeName&lt;/code&gt; and &lt;code&gt;changeYearOfBirth&lt;/code&gt; are methods. These properties point to the functions of the same name. Both functions reset the &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;yearOfBirth&lt;/code&gt; properties of whatever object they are called from, respectively.&lt;/p&gt;
+
+&lt;p&gt;They also change the &lt;code&gt;username&lt;/code&gt; property by invoking &lt;code&gt;updateUsername&lt;/code&gt;, a function scoped to &lt;code&gt;createProfile&lt;/code&gt;. &lt;code&gt;changeName&lt;/code&gt; and &lt;code&gt;changeYearOfBirth&lt;/code&gt; can invoke &lt;code&gt;updateUsername&lt;/code&gt; even when the object they are called from is outside the scope of &lt;code&gt;createProfile&lt;/code&gt; because these functions have closure over &lt;code&gt;createProfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Essentially this makes &lt;code&gt;updateUsername&lt;/code&gt; a private function.&lt;/strong&gt; It cannot be called directly outside of the context of &lt;code&gt;createProfile&lt;/code&gt;, but it can continue to operate when &lt;code&gt;changeName&lt;/code&gt; and &lt;code&gt;changeYearOfBirth&lt;/code&gt; get called.&lt;/p&gt;
+
+&lt;p&gt;In this example &lt;code&gt;updateUsername&lt;/code&gt; isn’t that interesting of a function. It seems kind of trivial that we would want to keep private a function that performs a pretty simple concatenation operation. But you can imagine scenarios where keeping functions private is anything but trivial.&lt;/p&gt;
+
+&lt;p&gt;What if instead of returning a small &lt;code&gt;profile&lt;/code&gt; object, we had a function that returned a huge public API, with tons of methods and data? It’s a safe bet that some of the methods that get returned in our public API rely on helper functions or variables that we don’t want the public to be able to access directly. In order for the methods that were returned by the API to work outside the context of their creation, we need a way to allow them to slide back into their original scope and look up those private methods. This is precisely what closure affords.&lt;/p&gt;
+
+&lt;h3 id=&quot;wrapping-up&quot;&gt;Wrapping up&lt;/h3&gt;
+
+&lt;p&gt;Hopefully by now you understand a little more about what closure is and why it’s important to JavaScript. It’s not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.&lt;/p&gt;
+
+&lt;p&gt;With that said, I hope you’ll continue to research this topic by referencing some of the resources I mentioned earlier or others that you find online. As always seems to be the case with JavaScript, for every important programming topic to be learned, there are thousands great explanations floating around the web just waiting to be absorbed.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>What's it like living in 185 sq/ft?</title>
