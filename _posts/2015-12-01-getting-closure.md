@@ -96,7 +96,7 @@ The final line of `foo` invokes `bar`, a function nested inside `foo` that logs 
 
 We started this discussion by thinking about scope in terms of rules of access the engine follows when it performs variable lookups. We ended it, however, by demonstrating a subtle but important reformulation: **scope is the constraining mechanism that binds the engine to a specified path of nested namespaces in order to complete variable lookups.** Starting with the scope of the current execution context, upon failing to find a variable the engine navigates backward consulting each parent scope until reaching the `global` scope, ultimately either finding the variable it needs and returning its value or not and raising a reference error.
 
-### On to closure...
+## On to closure...
 
 Let's take a look at another code snippet:
 
@@ -154,7 +154,7 @@ baz();           // I've been scoped to foo!
 
 In both these examples, `bar` has closure over `foo`, the function it was created in. And since `foo` returned `bar`—as either a method on an object or directly itself—in a certain fashion `bar` can continue to live on and function even outside `foo`'s scope.
 
-### Privacy
+## Privacy
 
 If you understand closure and it doesn't seem surprising to you, congratulations, you must have an excellent understanding of scope. Being able to intuitively determine how context shifts as code gets executed and how variables are looked up according to the scoping mechanism are the prerequisites to understanding and employing closure. **When these things become second nature, so too will the idea of closure.**
 
@@ -225,7 +225,7 @@ What if instead of returning a small `profile` object, we had a function that re
 
 *\*\*Note: for an extended discussion on the relation of closure to APIs and modules, see [this](https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&%20closures/ch5.md#modules) section in Kyle Simpson's [You Don't Know JS: Scope & Closure](https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures)*
 
-### Wrapping up
+## Wrapping up
 
 Hopefully by now you understand a little more about what closure is and why it's important to JavaScript. It's not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.
 

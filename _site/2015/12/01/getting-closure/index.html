@@ -151,7 +151,7 @@
 
 <p>We started this discussion by thinking about scope in terms of rules of access the engine follows when it performs variable lookups. We ended it, however, by demonstrating a subtle but important reformulation: <strong>scope is the constraining mechanism that binds the engine to a specified path of nested namespaces in order to complete variable lookups.</strong> Starting with the scope of the current execution context, upon failing to find a variable the engine navigates backward consulting each parent scope until reaching the <code>global</code> scope, ultimately either finding the variable it needs and returning its value or not and raising a reference error.</p>
 
-<h3 id="on-to-closure">On to closure…</h3>
+<h2 id="on-to-closure">On to closure…</h2>
 
 <p>Let’s take a look at another code snippet:</p>
 
@@ -205,7 +205,7 @@
 
 <p>In both these examples, <code>bar</code> has closure over <code>foo</code>, the function it was created in. And since <code>foo</code> returned <code>bar</code>—as either a method on an object or directly itself—in a certain fashion <code>bar</code> can continue to live on and function even outside <code>foo</code>’s scope.</p>
 
-<h3 id="privacy">Privacy</h3>
+<h2 id="privacy">Privacy</h2>
 
 <p>If you understand closure and it doesn’t seem surprising to you, congratulations, you must have an excellent understanding of scope. Being able to intuitively determine how context shifts as code gets executed and how variables are looked up according to the scoping mechanism are the prerequisites to understanding and employing closure. <strong>When these things become second nature, so too will the idea of closure.</strong></p>
 
@@ -274,7 +274,7 @@
 
 <p><em>**Note: for an extended discussion on the relation of closure to APIs and modules, see <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;%20closures/ch5.md#modules">this</a> section in Kyle Simpson’s <a href="https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures">You Don’t Know JS: Scope &amp; Closure</a></em></p>
 
-<h3 id="wrapping-up">Wrapping up</h3>
+<h2 id="wrapping-up">Wrapping up</h2>
 
 <p>Hopefully by now you understand a little more about what closure is and why it’s important to JavaScript. It’s not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.</p>
 
@@ -313,7 +313,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2015-12-11T15:44:14-08:00">2015</time>. All rights reserved.
+          &copy; <time datetime="2015-12-11T15:55:27-08:00">2015</time>. All rights reserved.
         </small>
       </footer>
     </div>

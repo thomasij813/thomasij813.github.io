@@ -3,8 +3,6 @@ layout: page
 title: About
 ---
 
-# Who am I?
-
 I'm a recent Seattle transplant, originally hailing from that super sunny and unapologetically weird state we know as Florida.
 
 My passions include front-end web development, UX design, data visualization and analysis, and the application of 20th-century Marxist and Psychoanalytic literary theory to Victorian literature?
