@@ -5,9 +5,9 @@ title: About
 
 I'm a recent Seattle transplant, originally hailing from that super sunny and unapologetically weird state we know as Florida.
 
-My passions include front-end web development, UX design, data visualization and analysis, and...the application of 20th-century Marxist theory to Victorian literature?
+My passions include front-end web development, UX design, and data visualization and analysis.
 
-That's right, I have a B.A. in English. I'm one of *those* people...
+I also happen to know a lot about Marxist literary theory and Victorian literature. That's right, I'm also one of [*those*](http://fyeahenglishmajorarmadillo.tumblr.com/) people...
 
 For more information about who I am and what type of web-related things I've done, feel free to check out the following links:
 
