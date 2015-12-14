@@ -3,11 +3,11 @@ layout: page
 title: About
 ---
 
-I'm a recent Seattle transplant, originally hailing from that super sunny and unapologetically weird state we know as Florida.
+I'm a recent Seattle transplant, originally hailing from that super sunny and unapologetically weird state known as Florida.
 
 My passions include front-end web development, UX design, and data visualization and analysis.
 
-I also happen to know a lot about Marxist literary theory and Victorian literature. That's right, I'm also one of [*those*](http://fyeahenglishmajorarmadillo.tumblr.com/) people...
+I also happen to know a lot about Marxist literary theory and Victorian literature. That's right, I'm one of [*those*](http://fyeahenglishmajorarmadillo.tumblr.com/) types of people...
 
 For more information about who I am and what type of web-related things I've done, feel free to check out the following links:
 
