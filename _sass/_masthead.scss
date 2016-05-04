@@ -10,13 +10,13 @@
     padding-left: 0px;
     list-style: none;
     display: inline;
-    @media (max-width: 425px) {
+    @media (max-width: 500px) {
       display: block;
     }
     li {
       display: inline;
       padding-left: 20px;
-      @media (max-width: 425px) {
+      @media (max-width: 500px) {
         display: block;
         padding-left: 0;
       }

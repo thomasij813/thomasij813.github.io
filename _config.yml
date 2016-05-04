@@ -32,5 +32,6 @@ github:
 
 navbar_list:
   About: "/about"
+  Projects: "/projects"
   Archive: "/archive"
   Contact: "/contact"
