@@ -3,5 +3,6 @@ layout: page
 title: Projects
 ---
 
+## Projects
 
-Projects go here
+{% include projects.html %}

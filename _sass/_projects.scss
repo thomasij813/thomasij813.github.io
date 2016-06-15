@@ -1,0 +1,51 @@
+.pictures {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pictures img {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: 0% 0%;
+}
+
+.pictures > li {
+  width: 40%;
+  height: 250px;
+  min-width: 250px;
+  position: relative;
+  margin: 5%;
+  &:hover .overlay {
+    opacity: 1;
+  }
+}
+
+.pictures .overlay {
+  font-size: 16px;
+  position: absolute;
+  background: rgba(102,195,255, 0.8);
+  color: white;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 300ms;
+  padding: .25em;
+  text-decoration: none;
+  .title {
+    color: inherit;
+  }
+  p {
+    font-size: .85em;
+  }
+  small {
+    font-style: italic;
+  }
+}
