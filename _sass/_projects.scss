@@ -5,6 +5,7 @@
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .pictures img {
@@ -13,16 +14,20 @@
   margin: 0;
   object-fit: cover;
   object-position: 0% 0%;
+  border-radius: 0;
 }
 
 .pictures > li {
-  width: 250px;
-  height: 250px;
+  width: 17rem;
+  height: 17rem;
   position: relative;
-  margin: 5%;
   &:hover .overlay {
     opacity: 1;
   }
+}
+
+.pictures .clear {
+  height: 0;
 }
 
 .pictures .overlay {
