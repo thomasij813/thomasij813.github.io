@@ -69,228 +69,46 @@
   
   <article class="post">
     <h1 class="post-title">
-      <a href="/2015/12/01/getting-closure/">
-        Getting Closure
+      <a href="/2016/06/16/its-been-a-while/">
+        It's probably time for an update...
       </a>
     </h1>
 
-    <time datetime="2015-12-01T00:00:00-08:00" class="post-date">01 Dec 2015</time>
+    <time datetime="2016-06-16T00:00:00-07:00" class="post-date">16 Jun 2016</time>
 
-    <p>I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.</p>
+    <p>So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.</p>
 
-<p>In this post, I’m going to try and explain the concept to the best of my abilities. This will by no means be a comprehensive explanation, and given my limited expertise I encourage readers to check out more authoritative sources before carrying whatever knowledge gained here into practice.</p>
+<p>Around this time last year, I began working my way through Free Code Camp’s web development program. The program is broken into three sections, providing certificates to participants who complete challenges in front-end development, data visualization (with an emphasis on D3 and React), and back end development.</p>
 
-<p>In particular, I highly recommend reading Kyle Simpson’s <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;%20closures/ch5.md">chapter on closure</a> from his excellent <a href="https://github.com/getify/You-Dont-Know-JS">You Don’t Know JS</a> series and the relevant passages from Douglas Crockford’s classic, <a href="http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742">JavaScript: The Good Parts</a>.</p>
+<p>When I began the program I had been personally studying JavaScript for about a year and a half. I was also working full time at a small teacher’s union as a technology specialist where almost all of my work involved managing data via queries and spreadsheets. At the time, my primary attention was directed at learning SQL so that I could extend the union’s membership database in ways that would provide better analytical opportunities for union leadership. This was satisfying work, but it suppressed my interest in web development and slowed my progress through <a href="https://www.freecodecamp.com/thomasij813">Free Code Camp’s curriculum</a>.</p>
 
-<h2 id="lets-talk-about-scope">Let’s talk about scope</h2>
+<p>When I moved to Seattle in October, however, I was able to focus more directly on JavaScript development. I powered through the coding challenges required by Free Code Camp’s front end program (they can all be viewed on my <a href="http://codepen.io/thomasij813/">codepen</a>) and received a certificate of completion in early December.</p>
 
-<p>Before getting to closure, it’s important to understand what scope is and how it works.</p>
+<p>In January, I began working through the back-end challenges, which required learning technologies that powered server side programming and REST APIs. First, I read and coded along to a few tutorials that covered Node.js, a topic I was somewhat familiar with from my experiences with NPM. I continued by learning about Express, an application framework for Node that greatly simplifies the process of writing back end code. Finally, I learned about MongoDB (and Mongoose), a popular noSQL database that stores data in JSON-like documents.</p>
 
-<p><strong>Put simply, in JavaScript scope refers to the rules that the engine abides by when it performs variable lookups.</strong> As you probably know, successfully looking up variables depends a lot on the namespaces they were assigned to and the context from which they are being looked up.</p>
+<p>After receiving instruction in these areas, I felt well prepared to take on the first five challenges in Free Code Camp’s back end program. These challenges involved writing small API microservices that respond to GET and POST requests. For example, one project required writing a URL shortening application, while another required developing an ‘Image search abstraction layer’ that  delivers JSON data containing image search results.</p>
 
-<p>Most developers know that trying to reference variables that were defined within a function from beyond the context of that function will return an error. This is because the variables were scoped to the namespace of the function they were defined in, and trying to call these variables from outside that namespace is forbidden by JavaScript’s engine.</p>
+<p>I’ve always been fascinated with REST API’s, and I really enjoyed writing the code that powered these microservice applications. You can check out all five of them here:</p>
 
-<p>Take a look at the following code snippet:</p>
+<ul>
+  <li><a href="https://dry-dusk-26167.herokuapp.com/">Timestamp Microservice</a></li>
+  <li><a href="https://lit-ocean-52245.herokuapp.com/">Request Header Parser Microservice</a></li>
+  <li><a href="https://still-inlet-20198.herokuapp.com/">URL Shortener Microservice</a></li>
+  <li><a href="https://murmuring-atoll-28618.herokuapp.com/">Image Search Abstraction Layer Microservice</a></li>
+  <li><a href="https://murmuring-hamlet-56604.herokuapp.com/">File Metadata Microservice</a></li>
+</ul>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">"I'm scoped to global!"</span><span class="p">;</span>
+<p>After completing the microservice challenges, I decided to take a break from Free Code Camp and work on a <a href="http://mcelroymadness.heroku.com/">personal project</a>. I’m a big fan of podcasts, and in particular, I really enjoy listening to some of the podcasts affiliated with the McElroy brothers. The problem, however, is that the McElroys produce something like 20 different podcasts and youtube series, and there’s currently no way to keep up with the latest episode of each of these productions without filling up your podcast app with subscriptions.</p>
 
-<span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="s2">"I'm scoped to foo!"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
-<span class="p">}</span>
+<p>So In February I started working on an app that fetches the latest mp3 URL for each podcast (or video in the case of the youtube series) and loads it into the browser ready to play. The project involved setting up the front end (a simple list of podcasts with some light javascript to control mp3 playback) as well as the backend (an express server with an API endpoint that returns the sorted JSON data). It was a fun and challenging project, and I hope to expand it the future.</p>
 
-<span class="nx">foo</span><span class="p">();</span> <span class="c1">// I'm scoped to global! I'm scoped to foo!</span>
+<p>Rather than continuing with the backend challenges, in March I shifted my focus to tackling the data visualization track. The track involved completing five projects using React and another five using D3. I spent a lot of time in March reading through the documentation on React (and Webpack) and following along to some popular online tutorials. React is a great library, and its functional  and component-based approach to front-end engineering is a pleasure to work with. I’m in full agreement that new engineers should learn React simply because it forces you to think critically about how data flows through the components of your application.</p>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// error</span></code></pre></div>
+<p>I finished up the React projects by the end of March and began teaching myself D3, a popular data visualization library. D3 binds data to DOM elements (ideally in the form of SVGs but not exclusively) by making heavy use of method chaining. This approach adopts a somewhat declarative outlook that can be tricky for new developers to wrap their head around (at least it was for me!). In any event, it took me a few months to complete the D3 challenges and finish up the data visualization track (I received the certificate of completion on May 30).</p>
 
-<p>When we invoke <code>foo</code>, the engine steps inside the function to execute its code, so to speak. This means that while its executing <code>foo</code>, the engine has access to all the variables mapped to that function’s namespace. For these reasons, <code>foo</code> is able to log successfully both <code>a</code> and <code>b</code>.</p>
+<p>Since then I’ve been working on some small projects here and there. I revisited the <a href="http://thomas-johnson.net/pomodoro/">pomodoro timer</a> and the <a href="http://thomas-johnson.net/weather/">weather application</a> I initially built as part of the front end track and refactored the code and design to make use of React and Sass. I have also been reading up on Redux, a state-management library created by Dan Abramov that heavily emphasizes functional programming and immutability and is popular among React developers. I’m actually very much inspired by the principles that inform Redux as well as the engineering techniques that it embodies, and I think that taking the time to really explore the project is helping me become a better developer.</p>
 
-<p>We run into problems when we attempt to log <code>b</code> from outside of <code>foo</code>. While it may seem strange that that the engine raises an error when we try to call <code>b</code> just six lines after defining it, according to the rules of scope, <code>b</code> is mapped to <code>foo</code>’s namespace. Trying to access <code>b</code> from outside the context of <code>foo</code>’s namespace is just not possible.</p>
-
-<p>That being understood, why then was <code>foo</code> able to call <code>a</code>? It seem’s like a contradiction to say that on one hand we are unable to look up <code>b</code> from outside <code>foo</code> because <code>foo</code> is where <code>b</code> was created, but on the other hand to say that <code>foo</code> can totally look up <code>a</code> even though <code>a</code> wasn’t defined there. Both lookups refer to variables that were defined somewhere other than the execution context of the call, so why does JavaScript forbid one lookup but not the other?</p>
-
-<p>The answer has less to do with what kind of lookups are forbidden and allowed by the JavaScript engine, and more with how that actual lookup process is performed. <strong>At this point, I should come clean about something: when I say scope is all about rules, I’m being a little misleading. In truth, it’s more appropriate to think of scope in terms of a constrained route the engine takes when it’s tasked with looking up variables.</strong></p>
-
-<p>When you reference a variable in your code, the JavaScript engine takes a strongly specified path to look it up. First, it looks to see if the variable was added to the current scope, that is, it checks to see if that variable exists within the namespace of the current execution context (ie, function). If it doesn’t find the variable in the current namespace, it take one step backward and checks to see if the namespace of the parent scope contains the requested variable. If again the engine fails to find the variable there, it checks the namespace of the parent’s parent scope, and so on all the way to the <code>global</code> scope.</p>
-
-<p>The <code>global</code> scope happens to be the final namespace on the engine’s lookup path. It provides access to variables that were defined outside of any function or variables that were declared without the preceding keyword <code>var</code>. There is no parent scope to <code>global</code>, so if the engine reaches it all the way here without finding the variable it needs, it raises a reference error.</p>
-
-<p>All functions and their namespaces, no matter how deeply nested, have access to the variables scoped to <code>global</code>. As a result, it can be very tempting to define all of the variables you’ll ever need in the namespace of the <code>global</code> scope. <strong>In truth, however, assigning variables to <code>global</code> is rarely a good idea, and it should be avoided.</strong></p>
-
-<p>Now that we know a little more about scope, the answer to our question about why <code>foo</code> was able to reference <code>a</code> should be clear. Here’s the code snippet from earlier:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">"I'm scoped to global!"</span><span class="p">;</span>
-
-<span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="s2">"I'm scoped to foo!"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nx">foo</span><span class="p">();</span> <span class="c1">// I'm scoped to global! I'm scoped to foo!</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// error</span></code></pre></div>
-
-<p><code>a</code> was defined within the <code>global</code> scope. When we invoke <code>foo</code>, the engine is tasked with finding <code>a</code>. When it fails to find it within <code>foo</code>’s namespace, the engine takes a step backward and finds it in <code>foo</code>’s parent, the <code>global</code> scope.</p>
-
-<p>Knowing how variables are looked up by the engine is important, and it allows us to better appreciate what the engine is doing to find variables. Before moving on to closure, however, I think it would serve our purpose to examine one more code snippet:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">"I'm scoped to foo!"</span><span class="p">;</span>
-
-  <span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="s2">"I'm scoped to bar!"</span><span class="p">;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="nx">bar</span><span class="p">();</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">baz</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="s2">"I'm scoped to baz!"</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">c</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nx">foo</span><span class="p">();</span> <span class="c1">// I'm scoped to foo! I'm scoped to bar!</span>
-<span class="nx">baz</span><span class="p">();</span> <span class="c1">// error</span></code></pre></div>
-
-<p>Before you continue reading, try and figure out why invoking <code>foo</code> succeeded and invoking <code>baz</code> failed. What path does the engine take to look up the variables these two functions reference?</p>
-
-<p>As I mentioned earlier, it’s only somewhat correct to say that the reason invoking <code>baz</code> raises an error when it attempts to log <code>a</code> and <code>b</code> is because the rules of scope forbid the engine from breaking the current execution context (which happens to be the function <code>baz</code>) and accessing the namespaces of <code>foo</code> and <code>bar</code>, the functions where those variables are defined. It’s better to say that the reason has to do with the route the engine takes when it tries to find those variables, a route that <code>foo</code> and <code>bar</code> just aren’t on.</p>
-
-<p>Following the variable lookup path helps reveal why <code>baz</code> came up short when it tried calling <code>a</code> and <code>b</code>. Tracing the lookup path taken by the engine when we invoke <code>foo</code> also explains why that function was able to successfully look up the same variables.</p>
-
-<p>The final line of <code>foo</code> invokes <code>bar</code>, a function nested inside <code>foo</code> that logs the two variables. This means that invoking <code>foo</code> pushes our execution context to <code>bar</code>. Finding <code>b</code> from inside <code>bar</code> is easy for the JavaScript engine since that’s the function where <code>b</code> was declared. The process the engine takes to find <code>a</code>, however, is complicated by the fact that there is no variable named <code>a</code> in <code>bar</code>’s namespace. Upon finding this out, the engine consults the namespace of <code>bar</code>’s parent scope, <code>foo</code>, where there is a variable named <code>a</code>. Hence, both variables are successfully able to be looked up by the engine and logged to the console.</p>
-
-<p>We started this discussion by thinking about scope in terms of rules of access the engine follows when it performs variable lookups. We ended it, however, by demonstrating a subtle but important reformulation: <strong>scope is the constraining mechanism that binds the engine to a specified path of nested namespaces in order to complete variable lookups.</strong> Starting with the scope of the current execution context, upon failing to find a variable the engine navigates backward consulting each parent scope until reaching the <code>global</code> scope, ultimately either finding the variable it needs and returning its value or not and raising a reference error.</p>
-
-<h2 id="on-to-closure">On to closure…</h2>
-
-<p>Let’s take a look at another code snippet:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"I'm scoped to bar!"</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span>  <span class="p">{</span>
-    <span class="na">bar</span><span class="p">:</span> <span class="nx">bar</span>
-  <span class="p">};</span>
-
-  <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nx">bar</span><span class="p">();</span> <span class="c1">// error</span>
-
-<span class="kd">var</span> <span class="nx">baz</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">();</span>
-<span class="nx">baz</span><span class="p">.</span><span class="nx">bar</span><span class="p">();</span> <span class="c1">// I'm scoped to bar!</span></code></pre></div>
-
-<p>Here we’ve created a function that returns an object. The object contains only one property, a method named <code>bar</code> that happens to point to a function of the same name nested inside <code>foo</code>. Trying to call <code>bar()</code> from the execution context of the <code>global</code> scope results in an error.</p>
-
-<p>So far, none of this is surprising. When we try to invoke <code>bar</code> from the <code>global</code> scope, we are essentially trying to call a function that cannot be accessed by the engine. <code>bar</code> is scoped to <code>foo</code>, so trying to call <code>bar</code> from the context of the <code>global</code> scope, which is the parent of <code>foo</code>, will fail. <strong>Remember, when the engine can’t find something in the namespace of the current execution context, it starts looking in the namespace of each parent scope.</strong> The <code>global</code> scope doesn’t have any parents, so when the engine fails to find <code>bar</code> in the <code>global</code> namespace, it’s forced to return an error.</p>
-
-<p>Notice, however, that invoking <code>baz.bar</code> executes correctly. Given our knowledge of scope, this should raise an important question: why is it that calling a method from the <code>global</code> scope that happens to point to <code>bar</code> succeeds and just calling <code>bar</code> directly fails? Aren’t both of these invocations performing lookups on a function that is defined in a namespace that cannot be reached from <code>global</code>?</p>
-
-<p><strong>The reason this works is because <code>baz.bar</code>, being a property on the object returned by <code>foo</code>, has closure over <code>foo</code>.</strong> The upshot of this is that when <code>baz.bar</code> gets invoked, the execution context slides momentarily back inside <code>bar</code>, meaning that <code>baz.bar</code> can call any variables that <code>bar</code> had access to as a function nested inside <code>foo</code>.</p>
-
-<p>This might give you the impression that <code>baz.bar</code> is breaking the “rules” of scope by being able to reference variables that aren’t within the current execution context of <code>baz</code> (ie, the <code>global</code> scope). <strong>In truth, calling <code>baz.bar</code> shifts the execution context, so to speak, so no “rules” are being broken here, and lookups get performed just as would be expected.</strong></p>
-
-<p>If you think this has something to do with the fact that <code>baz.bar</code> is a method on the object returned by <code>foo</code>, think again. The following code operates according to the same logic of closure:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
-
-  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="s2">"I've been scoped to foo!"</span>
-
-  <span class="kd">function</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="nx">bar</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>  <span class="c1">// error</span>
-<span class="nx">bar</span><span class="p">();</span>           <span class="c1">// error</span>
-
-<span class="kd">var</span> <span class="nx">baz</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">();</span> <span class="c1">// returns a pointer to the function object bar and assigns it to baz</span>
-<span class="nx">baz</span><span class="p">();</span>           <span class="c1">// I've been scoped to foo!</span></code></pre></div>
-
-<p><code>a</code> and <code>bar</code> are both scoped to <code>foo</code>’s namespace, so attempting to call them from the <code>global</code> scope results in an error. <code>baz</code>, on the other hand, is assigned to the result of invoking <code>foo</code>, meaning that <code>baz</code> points to <code>bar</code>. Just like in our earlier example when I said that <code>baz.bar</code> had closure over <code>foo</code>, here <code>bar</code> also has closure over <code>foo</code>. This means that invoking <code>baz</code> in turn invokes <code>bar</code>, and this, speaking a little crudely, <strong>is what slides the execution context back inside <code>bar</code>, a subtle maneuver affording the engine a variable lookup path on which it can locate <code>a</code>.</strong></p>
-
-<p>In both these examples, <code>bar</code> has closure over <code>foo</code>, the function it was created in. And since <code>foo</code> returned <code>bar</code>—as either a method on an object or directly itself—in a certain fashion <code>bar</code> can continue to live on and function even outside <code>foo</code>’s scope.</p>
-
-<h2 id="privacy">Privacy</h2>
-
-<p>If you understand closure and it doesn’t seem surprising to you, congratulations, you must have an excellent understanding of scope. Being able to intuitively determine how context shifts as code gets executed and how variables are looked up according to the scoping mechanism are the prerequisites to understanding and employing closure. <strong>When these things become second nature, so too will the idea of closure.</strong></p>
-
-<p>With that said, it’s worthwhile to dwell on the powerful functionality that closure affords. <strong>Because closure allows us to reference variables scoped to namespaces we otherwise could not access, it’s very easy to write code whose execution relies on private resources.</strong></p>
-
-<p>Consider the following code snippet:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">createProfile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">yearOfBirth</span><span class="p">)</span> <span class="p">{</span>
-
-  <span class="kd">function</span> <span class="nx">updateUsername</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">yearOfBirth</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">name</span> <span class="o">+</span> <span class="nx">yearOfBirth</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="kd">function</span> <span class="nx">changeName</span><span class="p">(</span><span class="nx">newName</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">newName</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">updateUsername</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">yearOfBirth</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="kd">function</span> <span class="nx">changeYearOfBirth</span><span class="p">(</span><span class="nx">newYearOfBirth</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">yearOfBirth</span> <span class="o">=</span> <span class="nx">newYearOfBirth</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">updateUsername</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">yearOfBirth</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">name</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
-    <span class="na">yearOfBirth</span><span class="p">:</span> <span class="nx">yearOfBirth</span><span class="p">,</span>
-    <span class="na">username</span><span class="p">:</span> <span class="nx">updateUsername</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">yearOfBirth</span><span class="p">),</span>
-    <span class="na">changeName</span><span class="p">:</span> <span class="nx">changeName</span><span class="p">,</span>
-    <span class="na">changeYearOfBirth</span><span class="p">:</span> <span class="nx">changeYearOfBirth</span>
-  <span class="p">};</span>
-
-  <span class="k">return</span> <span class="nx">profile</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">createProfile</span><span class="p">(</span><span class="s2">"Franklin"</span><span class="p">,</span> <span class="mi">1988</span><span class="p">);</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>        <span class="c1">// Franklin;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">yearOfBirth</span><span class="p">);</span> <span class="c1">// 1988</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>    <span class="c1">// Frankl1988</span>
-
-<span class="nx">profile</span><span class="p">.</span><span class="nx">username</span><span class="p">();</span>               <span class="c1">// error</span>
-
-<span class="nx">profile</span><span class="p">.</span><span class="nx">changeName</span><span class="p">(</span><span class="s2">"Montgomery"</span><span class="p">);</span>
-<span class="nx">profile</span><span class="p">.</span><span class="nx">changeYearOfBirth</span><span class="p">(</span><span class="mi">1950</span><span class="p">);</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>        <span class="c1">// Montgomery</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">yearOfBirth</span><span class="p">);</span> <span class="c1">// 1950</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">profile</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>    <span class="c1">// Montgo1950</span></code></pre></div>
-
-<p>In this example, I have created a <code>createProfile</code> function that takes as arguments a name and a year of birth and returns a <code>profile</code> object. The <code>profile</code> object contains five properties, two of which are assigned to whatever name and year of birth that was originally passed to the <code>createProfile</code> function.</p>
-
-<p>The property <code>username</code> is set to a string that is created as the result of passing <code>name</code> and <code>yearOfBirth</code> to the <code>updateUsername</code> function. <strong>Notice that <code>username</code> is not set to the function <code>updateUsername</code>; instead it’s set to the result of invoking <code>updateUsername</code>.</strong> If you tried to invoke <code>username</code> as a property of <code>profile</code> you would receive an error because <code>profile.username</code> is not a function. It’s just a string.</p>
-
-<p>Unlike <code>username</code>, the properties <code>changeName</code> and <code>changeYearOfBirth</code> are methods. These properties point to the functions of the same name. Both functions reset the <code>name</code> and <code>yearOfBirth</code> properties of whatever object they are called from, respectively.</p>
-
-<p>They also change the <code>username</code> property by invoking <code>updateUsername</code>, a function scoped to <code>createProfile</code>. <code>changeName</code> and <code>changeYearOfBirth</code> can invoke <code>updateUsername</code> even when the object they are called from is outside the scope of <code>createProfile</code> because these functions have closure over <code>createProfile</code>.</p>
-
-<p><strong>Essentially this makes <code>updateUsername</code> a private function.</strong> It cannot be called directly outside of the context of <code>createProfile</code>, but it can continue to operate when <code>changeName</code> and <code>changeYearOfBirth</code> get called.</p>
-
-<p>In this example <code>updateUsername</code> isn’t that interesting of a function. It seems kind of trivial that we would want to keep private a function that performs a pretty simple concatenation operation. But you can imagine scenarios where keeping functions private is anything but trivial.</p>
-
-<p>What if instead of returning a small <code>profile</code> object, we had a function that returned a huge public API, with tons of methods and data? It’s a safe bet that some of the methods that get returned in our public API rely on helper functions or variables that we don’t want the public to be able to access directly. In order for the methods that were returned by the API to work outside the context of their creation, we need a way to allow them to slide back into their original scope and look up those private methods. This is precisely what closure affords.</p>
-
-<p><em>**Note: for an extended discussion on the relation of closure to APIs and modules, see <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&amp;%20closures/ch5.md#modules">this</a> section in Kyle Simpson’s <a href="https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures">You Don’t Know JS: Scope &amp; Closure</a></em></p>
-
-<h2 id="wrapping-up">Wrapping up</h2>
-
-<p>Hopefully by now you understand a little more about what closure is and why it’s important to JavaScript. It’s not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.</p>
-
-<p>With that said, I hope you’ll continue to research this topic by referencing some of the resources I mentioned earlier or others that you find online. As always seems to be the case with JavaScript, for every important programming topic to be learned, there are thousands great explanations floating around the web just waiting to be absorbed.</p>
+<p>I’m also currently working on a small package (less than 10kb) that helps create really simple HTML sliders. The project is nearing it’s completion (I just need to write up the readme and refactor a little more), and I’ll probably post a little more about it when it’s finished.</p>
 
   </article>
   
@@ -309,7 +127,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2016-06-16T13:19:09-07:00">2016</time>. All rights reserved.
+          &copy; <time datetime="2016-06-19T13:33:08-07:00">2016</time>. All rights reserved.
         </small>
       </footer>
     </div>
