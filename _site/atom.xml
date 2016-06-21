@@ -4,7 +4,7 @@
  <title>Thomas Johnson</title>
  <link href="thomasij813.github.io/atom.xml" rel="self"/>
  <link href="thomasij813.github.io/"/>
- <updated>2016-06-20T19:02:37-07:00</updated>
+ <updated>2016-06-20T19:03:23-07:00</updated>
  <id>thomasij813.github.io</id>
  <author>
    <name>Thomas Johnson</name>
@@ -76,7 +76,7 @@
 
 &lt;p&gt;What gives? We pushed &lt;code&gt;4&lt;/code&gt; onto &lt;code&gt;b&lt;/code&gt; not &lt;code&gt;a&lt;/code&gt;! The problem is that &lt;code&gt;b = a&lt;/code&gt; does not actually do what we wanted it to do. What we wanted was for &lt;code&gt;b&lt;/code&gt; to get assigned to completely new array that was filled with the same values stored in &lt;code&gt;a&lt;/code&gt;. Instead, we simply pointed &lt;code&gt;b&lt;/code&gt; to &lt;code&gt;a&lt;/code&gt;, meaning that they both now refer to the same object. Hence, using &lt;code&gt;push&lt;/code&gt; to add a value to &lt;code&gt;b&lt;/code&gt; will mutate the array that &lt;code&gt;a&lt;/code&gt; also happens to be pointing at.&lt;/p&gt;
 
-&lt;p&gt;The best way to rewrite this code so that it actually achieves the intended outcome is to make use of &lt;code&gt;Array.slice&lt;/code&gt;, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call &lt;code&gt;slice&lt;/code&gt; without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:&lt;/p&gt;
+&lt;p&gt;The best way to rewrite this code so that it actually achieves the intended outcome is to make use of &lt;code&gt;slice&lt;/code&gt;, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call &lt;code&gt;slice&lt;/code&gt; without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;

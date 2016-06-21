@@ -66,7 +66,7 @@ console.log(a); // [1,2,3,4]
 
 What gives? We pushed `4` onto `b` not `a`! The problem is that `b = a` does not actually do what we wanted it to do. What we wanted was for `b` to get assigned to completely new array that was filled with the same values stored in `a`. Instead, we simply pointed `b` to `a`, meaning that they both now refer to the same object. Hence, using `push` to add a value to `b` will mutate the array that `a` also happens to be pointing at.
 
-The best way to rewrite this code so that it actually achieves the intended outcome is to make use of `Array.slice`, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call `slice` without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:
+The best way to rewrite this code so that it actually achieves the intended outcome is to make use of `slice`, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call `slice` without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:
 
 {% highlight javascript %}
 var a = [1,2,3];

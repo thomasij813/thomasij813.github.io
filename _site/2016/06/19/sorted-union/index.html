@@ -127,7 +127,7 @@
 
 <p>What gives? We pushed <code>4</code> onto <code>b</code> not <code>a</code>! The problem is that <code>b = a</code> does not actually do what we wanted it to do. What we wanted was for <code>b</code> to get assigned to completely new array that was filled with the same values stored in <code>a</code>. Instead, we simply pointed <code>b</code> to <code>a</code>, meaning that they both now refer to the same object. Hence, using <code>push</code> to add a value to <code>b</code> will mutate the array that <code>a</code> also happens to be pointing at.</p>
 
-<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code>Array.slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code>slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
+<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code>slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code>slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
 
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span>
@@ -373,7 +373,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2016-06-20T19:02:37-07:00">2016</time>. All rights reserved.
+          &copy; <time datetime="2016-06-20T19:03:23-07:00">2016</time>. All rights reserved.
         </small>
       </footer>
     </div>
