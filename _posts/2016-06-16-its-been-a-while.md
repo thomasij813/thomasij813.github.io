@@ -1,6 +1,7 @@
 ---
 layout: post
 title: It's probably time for an update...
+date: 2016-06-16
 ---
 
 So more than half a year has elapsed since my last post, and I think it's about time that I blow away the dust that's collected atop this little blog and issue an update. Since December of last year, I've worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Getting Closure
+date: 2015-12-01
 ---
 
 I've spent the last couple years learning JavaScript, but I'm just now starting to get the hang of closure. It's a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: How did I get here?
+date: 2015-10-25
 ---
 
 I've been living in Seattle for four days now, and I think it's time now for me to reflect on just how I got here. This has been a momentous change for me. Two years ago, I was living in the town I grew up in, Dade City, FL, where I had just moved after spending a year living in Chicago. Even though I knew moving back home was the right decision, it wasn't long before I began yearning for city streets. I began working for a teachers union in Pasco County in December of that year, and in about January  I started planning how I would be able to move back to a major city by the time I turned 27 in April 2015. I was 25.

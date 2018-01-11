@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Algorithm Scripting -- Sorted Union
+date: 2016-06-19
 ---
 
 Now that I've completed the first two tracks in Free Code Camp's curriculum, lately I've been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my [projects page](/projects)).
