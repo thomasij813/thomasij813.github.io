@@ -69,46 +69,275 @@
   
   <article class="post">
     <h1 class="post-title">
-      <a href="/2016/06/16/its-been-a-while/">
-        It's probably time for an update...
+      <a href="/2016/06/19/sorted-union/">
+        Algorithm Scripting -- Sorted Union
       </a>
     </h1>
 
-    <time datetime="2016-06-16T00:00:00-07:00" class="post-date">16 Jun 2016</time>
+    <time datetime="2016-06-19T00:00:00-07:00" class="post-date">19 Jun 2016</time>
 
-    <p>So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.</p>
+    <p>Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my <a href="/projects">projects page</a>).</p>
 
-<p>Around this time last year, I began working my way through Free Code Camp’s web development program. The program is broken into three sections, providing certificates to participants who complete challenges in front-end development, data visualization (with an emphasis on D3 and React), and back end development.</p>
+<p>But I would also like to return to some of the algorithms that make up Free Code Camp’s earliest challenges. I remember solving a lot of these challenges by resorting to heavily nested for loops, an operation flow that’s as computationally taxing as it is difficult to read.</p>
 
-<p>When I began the program I had been personally studying JavaScript for about a year and a half. I was also working full time at a small teacher’s union as a technology specialist where almost all of my work involved managing data via queries and spreadsheets. At the time, my primary attention was directed at learning SQL so that I could extend the union’s membership database in ways that would provide better analytical opportunities for union leadership. This was satisfying work, but it suppressed my interest in web development and slowed my progress through <a href="https://www.freecodecamp.com/thomasij813">Free Code Camp’s curriculum</a>.</p>
+<p>I want to devote at least few posts revising some of these algorithms and explaining my solutions. Taken together, I hope these posts will be a good demonstration of my particular approach to problem solving and may help new developers who are struggling in this area.</p>
 
-<p>When I moved to Seattle in October, however, I was able to focus more directly on JavaScript development. I powered through the coding challenges required by Free Code Camp’s front end program (they can all be viewed on my <a href="http://codepen.io/thomasij813/">codepen</a>) and received a certificate of completion in early December.</p>
+<h3 id="the-challenge-sorted-union">The challenge: sorted union</h3>
 
-<p>In January, I began working through the back-end challenges, which required learning technologies that powered server side programming and REST APIs. First, I read and coded along to a few tutorials that covered Node.js, a topic I was somewhat familiar with from my experiences with NPM. I continued by learning about Express, an application framework for Node that greatly simplifies the process of writing back end code. Finally, I learned about MongoDB (and Mongoose), a popular noSQL database that stores data in JSON-like documents.</p>
+<p>For this first post, I want to focus on <a href="https://www.freecodecamp.com/challenges/sorted-union">Sorted Union</a>, an algorithm challenge that was recently posted about in the <a href="http://forum.freecodecamp.com/">Free Code Camp forum</a>. Here’s a description of the challenge from the Free Code Camp website:</p>
 
-<p>After receiving instruction in these areas, I felt well prepared to take on the first five challenges in Free Code Camp’s back end program. These challenges involved writing small API microservices that respond to GET and POST requests. For example, one project required writing a URL shortening application, while another required developing an ‘Image search abstraction layer’ that  delivers JSON data containing image search results.</p>
+<blockquote>
+  <p>Write a function that takes two or more arrays and returns a new array of unique values in the order of the original provided arrays.</p>
 
-<p>I’ve always been fascinated with REST API’s, and I really enjoyed writing the code that powered these microservice applications. You can check out all five of them here:</p>
+  <p>In other words, all values present from all arrays should be included in their original order, but with no duplicates in the final array.</p>
 
-<ul>
-  <li><a href="https://dry-dusk-26167.herokuapp.com/">Timestamp Microservice</a></li>
-  <li><a href="https://lit-ocean-52245.herokuapp.com/">Request Header Parser Microservice</a></li>
-  <li><a href="https://still-inlet-20198.herokuapp.com/">URL Shortener Microservice</a></li>
-  <li><a href="https://murmuring-atoll-28618.herokuapp.com/">Image Search Abstraction Layer Microservice</a></li>
-  <li><a href="https://murmuring-hamlet-56604.herokuapp.com/">File Metadata Microservice</a></li>
-</ul>
+  <p>The unique numbers should be sorted by their original order, but the final array should not be sorted in numerical order.</p>
+</blockquote>
 
-<p>After completing the microservice challenges, I decided to take a break from Free Code Camp and work on a <a href="http://mcelroymadness.heroku.com/">personal project</a>. I’m a big fan of podcasts, and in particular, I really enjoy listening to some of the podcasts affiliated with the McElroy brothers. The problem, however, is that the McElroys produce something like 20 different podcasts and youtube series, and there’s currently no way to keep up with the latest episode of each of these productions without filling up your podcast app with subscriptions.</p>
+<p>As usual with Free Code Camp’s algorithm challenges, the challenge description is a little hard to understand. Fortunately, the test assertions provide a good indicator about what is being asked (<code>uniteUnique</code> is the name of the function we’re being asked to create):</p>
 
-<p>So In February I started working on an app that fetches the latest mp3 URL for each podcast (or video in the case of the youtube series) and loads it into the browser ready to play. The project involved setting up the front end (a simple list of podcasts with some light javascript to control mp3 playback) as well as the backend (an express server with an API endpoint that returns the sorted JSON data). It was a fun and challenging project, and I hope to expand it the future.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// I'm using the expect testing library to frame these assertions.</span>
 
-<p>Rather than continuing with the backend challenges, in March I shifted my focus to tackling the data visualization track. The track involved completing five projects using React and another five using D3. I spent a lot of time in March reading through the documentation on React (and Webpack) and following along to some popular online tutorials. React is a great library, and its functional  and component-based approach to front-end engineering is a pleasure to work with. I’m in full agreement that new engineers should learn React simply because it forces you to think critically about how data flows through the components of your application.</p>
+<span class="nx">expect</span><span class="p">(</span>
+  <span class="nx">uniteUnique</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="p">).</span><span class="nx">toEqual</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 
-<p>I finished up the React projects by the end of March and began teaching myself D3, a popular data visualization library. D3 binds data to DOM elements (ideally in the form of SVGs but not exclusively) by making heavy use of method chaining. This approach adopts a somewhat declarative outlook that can be tricky for new developers to wrap their head around (at least it was for me!). In any event, it took me a few months to complete the D3 challenges and finish up the data visualization track (I received the certificate of completion on May 30).</p>
+<span class="nx">expect</span><span class="p">(</span>
+  <span class="nx">uniteUnique</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
+<span class="p">).</span><span class="nx">toEqual</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span></code></pre></div>
 
-<p>Since then I’ve been working on some small projects here and there. I revisited the <a href="http://thomas-johnson.net/pomodoro/">pomodoro timer</a> and the <a href="http://thomas-johnson.net/weather/">weather application</a> I initially built as part of the front end track and refactored the code and design to make use of React and Sass. I have also been reading up on Redux, a state-management library created by Dan Abramov that heavily emphasizes functional programming and immutability and is popular among React developers. I’m actually very much inspired by the principles that inform Redux as well as the engineering techniques that it embodies, and I think that taking the time to really explore the project is helping me become a better developer.</p>
+<p>Basically, the idea here is that <code>uniteUnique</code> will take some arrays as arguments and return a single array filled with unique elements found in each of the passed in arrays. Moreover, the items in the array that gets returned must be in the order of their original placement. There’s one last thing worth mentioning thing that’s not said in the description but is made explicit from the test assertions: <code>uniteUnique</code> is a shallow operation, applying to only the arguments and not to any arrays that may be found within them.</p>
 
-<p>I’m also currently working on a small package (less than 10kb) that helps create really simple HTML sliders. The project is nearing it’s completion (I just need to write up the readme and refactor a little more), and I’ll probably post a little more about it when it’s finished.</p>
+<p>How do we solve this? First <code>uniteUnique</code> needs to create an empty array to which it is going to push each unique element it encounters among the arguments (this array will be returned at the end of the function). Determining the uniqueness of elements is going to require creating a nested loop: the outer loop will iterate through the arrays that get passed in as arguments, while the inner loop will iterate over each individual array to examine the elements that need to get pushed to the array that will be returned. Structured in a conventional manner, there is no need to worry about sorting because the elements will get pushed to the empty array in the order in which they are encountered.</p>
+
+<p>On to implementation. We might initially set up the <code>uniteUnique</code> function like so, initially declaring an empty array (<code>out</code>):</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="c1">// Our soon to be written loops</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Did you notice how I didn’t write in any parameters? According to the specification <code>uniteUnique</code>, can take any number of arguments, a requirement that complicates the traditional approach of handling arguments by way of parameter names. So how do we access the arguments that get passed to <code>uniteUnique</code> if we don’t know what to call them and we don’t know how many there are?</p>
+
+<p>Functions in javascript have access to something called <code>arguments</code>, an array-like object that refers to the arguments handed to the function. This is convenient, you might think, because the first of our nested loops involves looping over the arguments! Isn’t it nice that the <code>arguments</code> is an iterable object?</p>
+
+<p>Not so fast. Because we want to lean towards semantic clarity, we’re going to want to make use of something like <code>forEach</code> rather than a traditional for loop. Unfortunately for us, <code>arguments</code> is array-like, meaning it’s not a true array and is therefore not on the prototype chain that would grant access to <code>forEach</code>. We need to figure out a way of turning <code>arguments</code> from an array-like object into an actual array.</p>
+
+<p>Do you know how to copy an array? Consider the following snippet in which we attempt to clone array <code>a</code>:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
+
+<span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span></code></pre></div>
+
+<p>What gives? We pushed <code>4</code> onto <code>b</code> not <code>a</code>! The problem is that <code>b = a</code> does not actually do what we wanted it to do. What we wanted was for <code>b</code> to get assigned to completely new array that was filled with the same values stored in <code>a</code>. Instead, we simply pointed <code>b</code> to <code>a</code>, meaning that they both now refer to the same object. Hence, using <code>push</code> to add a value to <code>b</code> will mutate the array that <code>a</code> also happens to be pointing at.</p>
+
+<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code>slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code>slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span>
+
+<span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3]</span></code></pre></div>
+
+<p>Okay, so we can use <code>slice</code> to make a clone of <code>arguments</code>. But if <code>arguments</code> isn’t already an array, how are we going to call <code>slice</code> on it? The reason we couldn’t call <code>forEach</code> on <code>arguments</code> was because <code>forEach</code> is on the prototype chain of Array. Isn’t <code>slice</code> also on the same prototype chain?</p>
+
+<p>All this is entirely correct, and indeed using slice directly from <code>arguments</code> would fail. Fortunately, however, we can use <code>call</code> to shift the <code>this</code> context of <code>slice</code> so that it will work properly. This means writing some intimidating code that invokes <code>slice</code> directly from <code>Array.prototype</code> and then chains it to <code>call</code>, but I assure you this is well-traversed territory for many javascript developers (see <a href="https://davidwalsh.name/arguments-array">this post</a> for additional details).</p>
+
+<p><em>*** It should also be noted that using <code>slice</code> on <code>arguments</code> obstructs optimizations in some engines. You can read about an alternative approach <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments">here</a> ***</em></p>
+
+<p>We now have a way of transforming <code>arguments</code> into an actual array, so let’s write it into <code>uniqueUpdate</code>:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+  <span class="c1">// Our soon to be written loops</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The next bit is easy. Here’s how we would use <code>forEach</code> to loop over <code>args</code> (our <code>arguments</code> clone):</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Our soon to be written inner loop.</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Next, we need to add another <code>forEach</code> loop that iterates over the individual element of each argument, which would look something like this:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Determines whether or not the value should be added</span>
+      <span class="c1">// to the out array  </span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Now that we have the loops settled, we now need to create some type of test that will determine whether or not an individual element needs to be added to the array that will ultimately get returned (assigned to the variable <code>out</code> in our function). According to the instructions, <code>uniteUnique</code> must return only unique elements. This means, for example, that if among our arguments there exists multiple instances of the value <code>5</code>, only the first of those instances should be added to <code>out</code>.</p>
+
+<p>Since we are traversing the arguments and their elements sequentially, we can test each value for uniqueness simply by checking to see if it is already present in the <code>out</code> array. This is doubly useful because it also ensures that unique elements are added as they are encountered, meaning that the elements in <code>out</code> will be in the correct order.</p>
+
+<p>We can check if an element is in an array by using the <code>indexOf</code> property. <code>indexOf</code> will return the index of a given value in the array it is called on. In instances when the value is not found, it will return <code>-1</code>. Using <code>indexOf</code> we can now write the test case that will add elements to out like so:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">out</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">out</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>We have now completed the logic that will add unique values to the <code>out</code> array. The only thing left to do is return it:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
+
+   <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+   <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">if</span> <span class="p">(</span><span class="nx">out</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">out</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+       <span class="p">}</span>
+     <span class="p">});</span>
+   <span class="p">});</span>
+
+   <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
+ <span class="p">}</span></code></pre></div>
+
+<h3 id="refactoring-with-reduce">Refactoring with <code>reduce</code></h3>
+
+<p>As it currently exists <code>uniteUnique</code> is perfectly functional. Notice, however, that our logic involves filling an initially empty array that potentially mutates each time our loops advance. You should know that any time you write a <code>forEach</code> loop that adds items to an array you are overlooking an opportunity to use <code>reduce</code> instead.</p>
+
+<p><code>reduce</code>, like <code>forEach</code>, loops over an array performing a callback with each iteration. Unlike <code>forEach</code>, however, the callback given to <code>reduce</code> requires that something is returned, a value that will be provided to the next iteration of the loop. Basically <code>reduce</code> gives us a way of gradually building something up over the course of looping through an array’s elements.</p>
+
+<p>Consider the classic demonstration of using <code>reduce</code> to get the sum of an array of numbers. With <code>forEach</code>, we would write the following code that increments a counter by each number in the array:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">counter</span> <span class="o">+=</span> <span class="nx">number</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></div>
+
+<p>We can rewrite this code using <code>reduce</code> like so:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentNumber</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">accumulator</span> <span class="o">+</span> <span class="nx">currentNumber</span><span class="p">;</span>
+<span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></div>
+
+<p>The callback function handed to <code>reduce</code> receives two arguments, what I’ve called <code>accumulator</code> and <code>currentNumber</code>. <code>accumulator</code> refers to the value that was returned by the callback on the previous iteration (notice how the callback returns a value, unlike <code>forEach</code>).<code>currentNumber</code> refers to the item in the array that is currently being examined. The <code>0</code> that is passed in as the second argument to <code>reduce</code> refers to the value <code>accumulator</code> should assume the first time the callback is run.</p>
+
+<p>Taking this step-by-step, the first time <code>reduce</code> runs, <code>accumulator</code> is set to <code>0</code> and <code>currentNumber</code> is set to <code>1</code>. The callback returns the sum of these two numbers, which becomes the <code>accumulator</code> for the second iteration when <code>2</code> will be assigned to <code>currentNumber</code>. In that case, the callback will return <code>3</code>, which becomes the <code>accumulator</code> for the next cycle, and so on. In this way, all the numbers are added together resulting in <code>15</code> (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">MDN article</a> on <code>reduce</code> to learn more).</p>
+
+<p><code>reduce</code> is a handy function. Its syntax is a little tricky to get a handle of, but once you have it all figured out you’ll find it to be useful way of applying a compounding function on all the elements of an array, ultimately ‘reducing’ it to some final result.</p>
+
+<p>In our case, we can substitute initializing <code>out</code> to an empty array by assigning it directly to a reducing function that builds an array of unique elements found in the arguments:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">},</span> <span class="p">[]);</span>
+
+  <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>In fact, since the callback we are handing to <code>reduce</code> returns an array, we can dispense with assigning the result to <code>out</code> and just return it directly:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">},</span> <span class="p">[]);</span>
+<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="wrapping-up">Wrapping up</h3>
+
+<p>Before closing, there are three additional points I want to make regarding <code>uniteUnique</code>. When it comes to completing algorithm challenges like this, you’ll find that there are many different ways to achieve the desired outcome. Sometimes you’ll encounter overly complicated solutions with lots of nested for loops and counters. Other times you’ll read one-liners that make use of method chaining and regex tests. As a rule of thumb, I recommend striving for a solution that balances clarity with performance. You certainly want to avoid writing functions replete with taxing operations, but I also think it’s important to avoid single-line solutions that are especially cryptic.</p>
+
+<p>On that note, here are three additional ways of rewriting the above solution.</p>
+
+<p>First, you might have wondered we used <code>call</code> to access the <code>slice</code> method for <code>arguments</code> when we could have done the same thing for <code>reduce</code> (or <code>forEach</code>). In that case, there would be no need to create an <code>args</code> variable at the top of our function.</p>
+
+<p>Indeed, using <code>call</code> directly with <code>reduce</code> (or <code>forEach</code>) and <code>arguments</code> will work just fine. It would look something like this:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reduce</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
+  <span class="p">},</span> <span class="p">[]);</span>
+<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<p>This is a little too messy for my tastes. I begin to worry that my code is becoming unreadable once its shape starts resembling a sideways pyramid. This solution manages to bypass crafting an actual array from the array-like <code>arguments</code> object, but I don’t think trading in that small operation for this hard-to-read cascade of indented code is worth it.</p>
+
+<p><code>reduce</code> is definitely the way to go when it comes to managing our outer loop, but <code>forEach</code> is not our only option when it comes to the inner one. The <a href="https://www.freecodecamp.com/challenges/sorted-union#?solution=function%20uniteUnique(arr)%20%7B%0A%20%20var%20args%20%3D%20Array.prototype.slice.call(arguments)%3B%0A%20%20return%20args.reduce(function(accum%2C%20curr)%20%7B%0A%20%20%20%20return%20accum.concat(curr.filter(function(item)%20%7B%0A%20%20%20%20%20%20return%20accum.indexOf(item)%20%3C%200%3B%20%20%0A%20%20%20%20%7D))%3B%0A%20%20%7D%2C%20%5B%5D)%3B%0A%7D%0A%0AuniteUnique(%5B1%2C%203%2C%202%5D%2C%20%5B5%2C%202%2C%201%2C%204%5D%2C%20%5B2%2C%201%5D)%3B%0A">solution I submitted to Free Code Camp</a> involves using the <code>filter</code> method on the <code>currentArg</code> array to get an array of unique elements, the contents of which are then added the <code>accumulator</code> array by way of <code>concat</code>. It looks like this (we don’t actually need the empty array that makes up the second argument to<code>reduce</code>, by the way; it’s perfectly fine that the initial array in <code>args</code> be our first <code>accumulator</code>, which is what will happen if we leave it absent like below):</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">currentArg</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>  
+    <span class="p">}));</span>
+  <span class="p">});</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Those nested return statements (and the <code>concat</code> and <code>filter</code> combo) are a little strange looking, but fortunately ES6 syntax helps make things look a little better:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="p">[...</span><span class="nx">accumulator</span><span class="p">,</span>
+    <span class="p">...</span><span class="nx">currentArg</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)]);</span>
+<span class="p">}</span></code></pre></div>
+
 
   </article>
   
@@ -127,7 +356,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2018-01-10T17:39:38-08:00">2018</time>. All rights reserved.
+          &copy; <time datetime="2018-01-11T20:39:10-08:00">2018</time>. All rights reserved.
         </small>
       </footer>
     </div>
