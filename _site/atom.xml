@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Thomas Johnson</title>
- <link href="thomasij813.github.io/atom.xml" rel="self"/>
- <link href="thomasij813.github.io/"/>
- <updated>2019-12-12T14:52:24-08:00</updated>
- <id>thomasij813.github.io</id>
+ <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <link href="http://localhost:4000/"/>
+ <updated>2019-12-12T14:58:31-08:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Thomas Johnson</name>
    <email>thomasij813@gmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Algorithm Scripting -- Group By</title>
-   <link href="thomasij813.github.io/2016/06/25/group-by/"/>
+   <link href="http://localhost:4000/2016/06/25/group-by/"/>
    <updated>2016-06-25T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/25/group-by</id>
+   <id>http://localhost:4000/2016/06/25/group-by</id>
    <content type="html">&lt;p&gt;In the &lt;a href=&quot;/2016/06/19/sorted-union/&quot;&gt;last post&lt;/a&gt;, I explained how to solve Free Code Camp’s &lt;a href=&quot;https://www.freecodecamp.com/challenges/sorted-union&quot;&gt;Sorted Union&lt;/a&gt; algorithm challenge. Today, I want to talk about a &lt;a href=&quot;https://www.codewars.com&quot;&gt;Codewars&lt;/a&gt; algorithm challenge that I recently submitted a solution for.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-challenge-arrayprototypegroupby&quot;&gt;The challenge: Array.prototype.groupBy&lt;/h3&gt;
@@ -242,9 +242,9 @@
  
  <entry>
    <title>Algorithm Scripting -- Sorted Union</title>
-   <link href="thomasij813.github.io/2016/06/19/sorted-union/"/>
+   <link href="http://localhost:4000/2016/06/19/sorted-union/"/>
    <updated>2016-06-19T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/19/sorted-union</id>
+   <id>http://localhost:4000/2016/06/19/sorted-union</id>
    <content type="html">&lt;p&gt;Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my &lt;a href=&quot;/projects&quot;&gt;projects page&lt;/a&gt;).&lt;/p&gt;
 
 &lt;p&gt;But I would also like to return to some of the algorithms that make up Free Code Camp’s earliest challenges. I remember solving a lot of these challenges by resorting to heavily nested for loops, an operation flow that’s as computationally taxing as it is difficult to read.&lt;/p&gt;
@@ -513,9 +513,9 @@
  
  <entry>
    <title>It's probably time for an update...</title>
-   <link href="thomasij813.github.io/2016/06/16/its-been-a-while/"/>
+   <link href="http://localhost:4000/2016/06/16/its-been-a-while/"/>
    <updated>2016-06-16T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/16/its-been-a-while</id>
+   <id>http://localhost:4000/2016/06/16/its-been-a-while</id>
    <content type="html">&lt;p&gt;So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.&lt;/p&gt;
 
 &lt;p&gt;Around this time last year, I began working my way through Free Code Camp’s web development program. The program is broken into three sections, providing certificates to participants who complete challenges in front-end development, data visualization (with an emphasis on D3 and React), and back end development.&lt;/p&gt;
@@ -554,9 +554,9 @@
  
  <entry>
    <title>Getting Closure</title>
-   <link href="thomasij813.github.io/2015/12/01/getting-closure/"/>
+   <link href="http://localhost:4000/2015/12/01/getting-closure/"/>
    <updated>2015-12-01T00:00:00-08:00</updated>
-   <id>thomasij813.github.io/2015/12/01/getting-closure</id>
+   <id>http://localhost:4000/2015/12/01/getting-closure</id>
    <content type="html">&lt;p&gt;I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.&lt;/p&gt;
 
 &lt;p&gt;In this post, I’m going to try and explain the concept to the best of my abilities. This will by no means be a comprehensive explanation, and given my limited expertise I encourage readers to check out more authoritative sources before carrying whatever knowledge gained here into practice.&lt;/p&gt;
@@ -777,9 +777,9 @@
  
  <entry>
    <title>What's it like living in 185 sq/ft?</title>
-   <link href="thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft/"/>
+   <link href="http://localhost:4000/2015/11/17/whats-it-like-living-in-185-sq-ft/"/>
    <updated>2015-11-17T00:00:00-08:00</updated>
-   <id>thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft</id>
+   <id>http://localhost:4000/2015/11/17/whats-it-like-living-in-185-sq-ft</id>
    <content type="html">&lt;p&gt;Since moving to Seattle a month ago, a lot of the questions I get from my friends and family have been about my apartment. When I decided to move to Seattle without a job lined up, one of the reasons I felt confident that I would be able to afford the move was because I knew the city was allowing developers to build affordable micro-studio apartments.&lt;/p&gt;
 
 &lt;p&gt;Micro-studios are super-tiny apartments, ranging in size from about 140 to 275 sq/ft. As you can imagine, most micro-studios are cheaper than regular-sized studio apartments, especially because almost of the ones I’ve seen include utilities. They are especially appealing to transplants and residents who need flexible leasing terms because many come pre-furnished and most of the leases can be signed month-to-month.&lt;/p&gt;
@@ -796,9 +796,9 @@
  
  <entry>
    <title>How did I get here?</title>
-   <link href="thomasij813.github.io/2015/10/25/how-did-i-get-here/"/>
+   <link href="http://localhost:4000/2015/10/25/how-did-i-get-here/"/>
    <updated>2015-10-25T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2015/10/25/how-did-i-get-here</id>
+   <id>http://localhost:4000/2015/10/25/how-did-i-get-here</id>
    <content type="html">&lt;p&gt;I’ve been living in Seattle for four days now, and I think it’s time now for me to reflect on just how I got here. This has been a momentous change for me. Two years ago, I was living in the town I grew up in, Dade City, FL, where I had just moved after spending a year living in Chicago. Even though I knew moving back home was the right decision, it wasn’t long before I began yearning for city streets. I began working for a teachers union in Pasco County in December of that year, and in about January  I started planning how I would be able to move back to a major city by the time I turned 27 in April 2015. I was 25.&lt;/p&gt;
 
 &lt;p&gt;My plan was to save at least $24,000 before moving. I figured this would give me $2,000 a month, which I felt was more than enough to cover rent and modest living expenses for a year, the maximum amount of time I felt it would take for me to get a job. To help save the money, I moved in with my mom.&lt;/p&gt;
