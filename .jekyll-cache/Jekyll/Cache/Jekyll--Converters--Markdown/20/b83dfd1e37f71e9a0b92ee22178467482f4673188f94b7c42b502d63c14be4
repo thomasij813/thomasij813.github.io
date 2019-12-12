@@ -1,9 +1,9 @@
+I"M<h2 id="projects">Projects</h2>
+
 <ul class="pictures">
   <li>
-    <img
-      src="https://dl.dropboxusercontent.com/s/2qusei0yap8nkux/mcelroy_madness.png"
-    />
-    <a class="overlay" href="https://github.com/thomasij813/mcelroy_madness">
+    <img src="https://dl.dropboxusercontent.com/s/2qusei0yap8nkux/mcelroy_madness.png" />
+    <a class="overlay" href="#">
       <h3 class="title">McElroy Madness</h3>
       <p>
         Gathers the most recent episode of each podcast produced by the McElroy
@@ -51,3 +51,5 @@
 
   <li class="clear"></li>
 </ul>
+
+:ET

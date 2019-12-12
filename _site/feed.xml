@@ -1,23 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-
- <title>Thomas Johnson</title>
- <link href="thomasij813.github.io/atom.xml" rel="self"/>
- <link href="thomasij813.github.io/"/>
- <updated>2019-12-12T14:52:24-08:00</updated>
- <id>thomasij813.github.io</id>
- <author>
-   <name>Thomas Johnson</name>
-   <email>thomasij813@gmail.com</email>
- </author>
-
- 
- <entry>
-   <title>Algorithm Scripting -- Group By</title>
-   <link href="thomasij813.github.io/2016/06/25/group-by/"/>
-   <updated>2016-06-25T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/25/group-by</id>
-   <content type="html">&lt;p&gt;In the &lt;a href=&quot;/2016/06/19/sorted-union/&quot;&gt;last post&lt;/a&gt;, I explained how to solve Free Code Camp’s &lt;a href=&quot;https://www.freecodecamp.com/challenges/sorted-union&quot;&gt;Sorted Union&lt;/a&gt; algorithm challenge. Today, I want to talk about a &lt;a href=&quot;https://www.codewars.com&quot;&gt;Codewars&lt;/a&gt; algorithm challenge that I recently submitted a solution for.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="thomasij813.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="thomasij813.github.io/" rel="alternate" type="text/html" /><updated>2019-12-12T14:52:24-08:00</updated><id>thomasij813.github.io/feed.xml</id><title type="html">Thomas Johnson</title><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><entry><title type="html">Algorithm Scripting – Group By</title><link href="thomasij813.github.io/2016/06/25/group-by/" rel="alternate" type="text/html" title="Algorithm Scripting -- Group By" /><published>2016-06-25T00:00:00-07:00</published><updated>2016-06-25T00:00:00-07:00</updated><id>thomasij813.github.io/2016/06/25/group-by</id><content type="html" xml:base="thomasij813.github.io/2016/06/25/group-by/">&lt;p&gt;In the &lt;a href=&quot;/2016/06/19/sorted-union/&quot;&gt;last post&lt;/a&gt;, I explained how to solve Free Code Camp’s &lt;a href=&quot;https://www.freecodecamp.com/challenges/sorted-union&quot;&gt;Sorted Union&lt;/a&gt; algorithm challenge. Today, I want to talk about a &lt;a href=&quot;https://www.codewars.com&quot;&gt;Codewars&lt;/a&gt; algorithm challenge that I recently submitted a solution for.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-challenge-arrayprototypegroupby&quot;&gt;The challenge: Array.prototype.groupBy&lt;/h3&gt;
 
@@ -236,16 +217,7 @@
 
 &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;First we create an empty object, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;. Next, we employ a ternary (as opposed to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if...else&lt;/code&gt; syntax from above) to handle setting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x[prop]&lt;/code&gt;. And rather than using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;push&lt;/code&gt;, we’re now using the spread operator to create add the item to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;accum[prop]&lt;/code&gt;. Finally, we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.assign&lt;/code&gt; to gracefully merge &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;accum&lt;/code&gt;.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Algorithm Scripting -- Sorted Union</title>
-   <link href="thomasij813.github.io/2016/06/19/sorted-union/"/>
-   <updated>2016-06-19T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/19/sorted-union</id>
-   <content type="html">&lt;p&gt;Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my &lt;a href=&quot;/projects&quot;&gt;projects page&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;First we create an empty object, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt;. Next, we employ a ternary (as opposed to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if...else&lt;/code&gt; syntax from above) to handle setting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x[prop]&lt;/code&gt;. And rather than using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;push&lt;/code&gt;, we’re now using the spread operator to create add the item to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;accum[prop]&lt;/code&gt;. Finally, we use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object.assign&lt;/code&gt; to gracefully merge &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;accum&lt;/code&gt;.&lt;/p&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">In the last post, I explained how to solve Free Code Camp’s Sorted Union algorithm challenge. Today, I want to talk about a Codewars algorithm challenge that I recently submitted a solution for.</summary></entry><entry><title type="html">Algorithm Scripting – Sorted Union</title><link href="thomasij813.github.io/2016/06/19/sorted-union/" rel="alternate" type="text/html" title="Algorithm Scripting -- Sorted Union" /><published>2016-06-19T00:00:00-07:00</published><updated>2016-06-19T00:00:00-07:00</updated><id>thomasij813.github.io/2016/06/19/sorted-union</id><content type="html" xml:base="thomasij813.github.io/2016/06/19/sorted-union/">&lt;p&gt;Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my &lt;a href=&quot;/projects&quot;&gt;projects page&lt;/a&gt;).&lt;/p&gt;
 
 &lt;p&gt;But I would also like to return to some of the algorithms that make up Free Code Camp’s earliest challenges. I remember solving a lot of these challenges by resorting to heavily nested for loops, an operation flow that’s as computationally taxing as it is difficult to read.&lt;/p&gt;
 
@@ -506,17 +478,7 @@
   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;accumulator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;currentArg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;[...&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;accumulator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;currentArg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;accumulator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;indexOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</content>
- </entry>
- 
- <entry>
-   <title>It's probably time for an update...</title>
-   <link href="thomasij813.github.io/2016/06/16/its-been-a-while/"/>
-   <updated>2016-06-16T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2016/06/16/its-been-a-while</id>
-   <content type="html">&lt;p&gt;So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.&lt;/p&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my projects page).</summary></entry><entry><title type="html">It’s probably time for an update…</title><link href="thomasij813.github.io/2016/06/16/its-been-a-while/" rel="alternate" type="text/html" title="It's probably time for an update..." /><published>2016-06-16T00:00:00-07:00</published><updated>2016-06-16T00:00:00-07:00</updated><id>thomasij813.github.io/2016/06/16/its-been-a-while</id><content type="html" xml:base="thomasij813.github.io/2016/06/16/its-been-a-while/">&lt;p&gt;So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.&lt;/p&gt;
 
 &lt;p&gt;Around this time last year, I began working my way through Free Code Camp’s web development program. The program is broken into three sections, providing certificates to participants who complete challenges in front-end development, data visualization (with an emphasis on D3 and React), and back end development.&lt;/p&gt;
 
@@ -548,16 +510,7 @@
 
 &lt;p&gt;Since then I’ve been working on some small projects here and there. I revisited the &lt;a href=&quot;http://thomas-johnson.net/pomodoro/&quot;&gt;pomodoro timer&lt;/a&gt; and the &lt;a href=&quot;http://thomas-johnson.net/weather/&quot;&gt;weather application&lt;/a&gt; I initially built as part of the front end track and refactored the code and design to make use of React and Sass. I have also been reading up on Redux, a state-management library created by Dan Abramov that heavily emphasizes functional programming and immutability and is popular among React developers. I’m actually very much inspired by the principles that inform Redux as well as the engineering techniques that it embodies, and I think that taking the time to really explore the project is helping me become a better developer.&lt;/p&gt;
 
-&lt;p&gt;I’m also currently working on a small package (less than 10kb) that helps create really simple HTML sliders. The project is nearing it’s completion (I just need to write up the readme and refactor a little more), and I’ll probably post a little more about it when it’s finished.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Getting Closure</title>
-   <link href="thomasij813.github.io/2015/12/01/getting-closure/"/>
-   <updated>2015-12-01T00:00:00-08:00</updated>
-   <id>thomasij813.github.io/2015/12/01/getting-closure</id>
-   <content type="html">&lt;p&gt;I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.&lt;/p&gt;
+&lt;p&gt;I’m also currently working on a small package (less than 10kb) that helps create really simple HTML sliders. The project is nearing it’s completion (I just need to write up the readme and refactor a little more), and I’ll probably post a little more about it when it’s finished.&lt;/p&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">So more than half a year has elapsed since my last post, and I think it’s about time that I blow away the dust that’s collected atop this little blog and issue an update. Since December of last year, I’ve worked on a bunch of projects in my pursuit of web development, so I would like to use this post as an opportunity to quickly run through some of them.</summary></entry><entry><title type="html">Getting Closure</title><link href="thomasij813.github.io/2015/12/01/getting-closure/" rel="alternate" type="text/html" title="Getting Closure" /><published>2015-12-01T00:00:00-08:00</published><updated>2015-12-01T00:00:00-08:00</updated><id>thomasij813.github.io/2015/12/01/getting-closure</id><content type="html" xml:base="thomasij813.github.io/2015/12/01/getting-closure/">&lt;p&gt;I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.&lt;/p&gt;
 
 &lt;p&gt;In this post, I’m going to try and explain the concept to the best of my abilities. This will by no means be a comprehensive explanation, and given my limited expertise I encourage readers to check out more authoritative sources before carrying whatever knowledge gained here into practice.&lt;/p&gt;
 
@@ -771,16 +724,7 @@
 
 &lt;p&gt;Hopefully by now you understand a little more about what closure is and why it’s important to JavaScript. It’s not the easiest concept to figure out, and I gather that fully appreciating it requires a somewhat sophisticated understanding of scope.&lt;/p&gt;
 
-&lt;p&gt;With that said, I hope you’ll continue to research this topic by referencing some of the resources I mentioned earlier or others that you find online. As always seems to be the case with JavaScript, for every important programming topic to be learned, there are thousands great explanations floating around the web just waiting to be absorbed.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>What's it like living in 185 sq/ft?</title>
-   <link href="thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft/"/>
-   <updated>2015-11-17T00:00:00-08:00</updated>
-   <id>thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft</id>
-   <content type="html">&lt;p&gt;Since moving to Seattle a month ago, a lot of the questions I get from my friends and family have been about my apartment. When I decided to move to Seattle without a job lined up, one of the reasons I felt confident that I would be able to afford the move was because I knew the city was allowing developers to build affordable micro-studio apartments.&lt;/p&gt;
+&lt;p&gt;With that said, I hope you’ll continue to research this topic by referencing some of the resources I mentioned earlier or others that you find online. As always seems to be the case with JavaScript, for every important programming topic to be learned, there are thousands great explanations floating around the web just waiting to be absorbed.&lt;/p&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">I’ve spent the last couple years learning JavaScript, but I’m just now starting to get the hang of closure. It’s a tricky but important concept, one that trips up a lot of programmers new to JavaScript and sometimes even eludes experienced developers.</summary></entry><entry><title type="html">What’s it like living in 185 sq/ft?</title><link href="thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft/" rel="alternate" type="text/html" title="What's it like living in 185 sq/ft?" /><published>2015-11-17T00:00:00-08:00</published><updated>2015-11-17T00:00:00-08:00</updated><id>thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft</id><content type="html" xml:base="thomasij813.github.io/2015/11/17/whats-it-like-living-in-185-sq-ft/">&lt;p&gt;Since moving to Seattle a month ago, a lot of the questions I get from my friends and family have been about my apartment. When I decided to move to Seattle without a job lined up, one of the reasons I felt confident that I would be able to afford the move was because I knew the city was allowing developers to build affordable micro-studio apartments.&lt;/p&gt;
 
 &lt;p&gt;Micro-studios are super-tiny apartments, ranging in size from about 140 to 275 sq/ft. As you can imagine, most micro-studios are cheaper than regular-sized studio apartments, especially because almost of the ones I’ve seen include utilities. They are especially appealing to transplants and residents who need flexible leasing terms because many come pre-furnished and most of the leases can be signed month-to-month.&lt;/p&gt;
 
@@ -790,16 +734,7 @@
 
 &lt;p&gt;Most importantly, the small space really appeals to my sensibilities. While I’m not opposed to owning things, I have always avoided collecting lots of stuff, especially stuff that is big and heavy and carries with it lots of obligations. I believe that every time you bring an item into your home, you bring with it a certain set of responsibilities that you tacitly agree to. When you have a big apartment filled with lots of stuff, you become bound to all of the responsibilities you have accumulated. And that means that it takes more time and money to get things done.&lt;/p&gt;
 
-&lt;p&gt;The small size of my apartment guarantees that I won’t become encumbered by my belongings. When you have fewer things to take care of and think about–when you no longer have to worry about if it’s time to replace this-or-that item, or if you need to repair this thing or clean that one–it becomes easier to live intentionally, spontaneously. And since moving to Seattle was always more than about finding a new home for me, I like the sense of unencumbered potential for adventure that my teeny-tiny apartment affords.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>How did I get here?</title>
-   <link href="thomasij813.github.io/2015/10/25/how-did-i-get-here/"/>
-   <updated>2015-10-25T00:00:00-07:00</updated>
-   <id>thomasij813.github.io/2015/10/25/how-did-i-get-here</id>
-   <content type="html">&lt;p&gt;I’ve been living in Seattle for four days now, and I think it’s time now for me to reflect on just how I got here. This has been a momentous change for me. Two years ago, I was living in the town I grew up in, Dade City, FL, where I had just moved after spending a year living in Chicago. Even though I knew moving back home was the right decision, it wasn’t long before I began yearning for city streets. I began working for a teachers union in Pasco County in December of that year, and in about January  I started planning how I would be able to move back to a major city by the time I turned 27 in April 2015. I was 25.&lt;/p&gt;
+&lt;p&gt;The small size of my apartment guarantees that I won’t become encumbered by my belongings. When you have fewer things to take care of and think about–when you no longer have to worry about if it’s time to replace this-or-that item, or if you need to repair this thing or clean that one–it becomes easier to live intentionally, spontaneously. And since moving to Seattle was always more than about finding a new home for me, I like the sense of unencumbered potential for adventure that my teeny-tiny apartment affords.&lt;/p&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">Since moving to Seattle a month ago, a lot of the questions I get from my friends and family have been about my apartment. When I decided to move to Seattle without a job lined up, one of the reasons I felt confident that I would be able to afford the move was because I knew the city was allowing developers to build affordable micro-studio apartments.</summary></entry><entry><title type="html">How did I get here?</title><link href="thomasij813.github.io/2015/10/25/how-did-i-get-here/" rel="alternate" type="text/html" title="How did I get here?" /><published>2015-10-25T00:00:00-07:00</published><updated>2015-10-25T00:00:00-07:00</updated><id>thomasij813.github.io/2015/10/25/how-did-i-get-here</id><content type="html" xml:base="thomasij813.github.io/2015/10/25/how-did-i-get-here/">&lt;p&gt;I’ve been living in Seattle for four days now, and I think it’s time now for me to reflect on just how I got here. This has been a momentous change for me. Two years ago, I was living in the town I grew up in, Dade City, FL, where I had just moved after spending a year living in Chicago. Even though I knew moving back home was the right decision, it wasn’t long before I began yearning for city streets. I began working for a teachers union in Pasco County in December of that year, and in about January  I started planning how I would be able to move back to a major city by the time I turned 27 in April 2015. I was 25.&lt;/p&gt;
 
 &lt;p&gt;My plan was to save at least $24,000 before moving. I figured this would give me $2,000 a month, which I felt was more than enough to cover rent and modest living expenses for a year, the maximum amount of time I felt it would take for me to get a job. To help save the money, I moved in with my mom.&lt;/p&gt;
 
@@ -821,9 +756,4 @@
 
 &lt;p&gt;The road trip was a great experience (I’ll have to commit an entire post to that some day!), but six weeks was a long time to be on the road. I’m thankful that I had the opportunity to do it, but I was also  glad when it came to an end. I flew to Seattle from Atlanta on October 20 (we were camping in northern Georgia at the time), and since then I’ve been reacquainting myself to city life.&lt;/p&gt;
 
-&lt;p&gt;I can already tell that it’s going to be a lot harder living so far away from my friends and family than I had imagined. Whenever I start doubting my decision, however, I just remind myself that this move was about being adventurous and taking risks. There will be difficult moments, I know, but I’m determined to make this work and to overcome the many challenges I have yet to face.&lt;/p&gt;
-</content>
- </entry>
- 
-
-</feed>
+&lt;p&gt;I can already tell that it’s going to be a lot harder living so far away from my friends and family than I had imagined. Whenever I start doubting my decision, however, I just remind myself that this move was about being adventurous and taking risks. There will be difficult moments, I know, but I’m determined to make this work and to overcome the many challenges I have yet to face.&lt;/p&gt;</content><author><name>Thomas Johnson</name><email>thomasij813@gmail.com</email></author><summary type="html">I’ve been living in Seattle for four days now, and I think it’s time now for me to reflect on just how I got here. This has been a momentous change for me. Two years ago, I was living in the town I grew up in, Dade City, FL, where I had just moved after spending a year living in Chicago. Even though I knew moving back home was the right decision, it wasn’t long before I began yearning for city streets. I began working for a teachers union in Pasco County in December of that year, and in about January I started planning how I would be able to move back to a major city by the time I turned 27 in April 2015. I was 25.</summary></entry></feed>

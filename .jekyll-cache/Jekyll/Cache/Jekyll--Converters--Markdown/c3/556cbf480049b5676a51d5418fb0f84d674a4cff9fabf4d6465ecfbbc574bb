@@ -1,82 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-  <head>
-  <meta charset="UTF-8">
-  <link href="http://gmpg.org/xfn/11" rel="profile">
-
-  <!-- Enable responsiveness on mobile devices-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>
-    
-      Thomas Johnson
-    
-  </title>
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="/styles.css">
-
-  <!-- Icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/icon.png">
-  <link rel="shortcut icon" href="/public/icon-small.png">
-
-  <!-- RSS -->
-  <link rel="alternate" type="application/atom+xml" title="Thomas Johnson" href="/atom.xml">
-
-  <!-- JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
-  <script src="/script.js"></script>
-</head>
-
-
-  <body>
-
-    <div class="container content">
-      <header class="masthead">
-        <h3 class="masthead-title">
-          <a href="/" title="Home">Thomas Johnson</a>
-        </h3>
-        <ul>
-          
-            
-              <li><a class="small" href="/about">About</a></li>
-            
-          
-            
-              <li><a class="small" href="/projects">Projects</a></li>
-            
-          
-            
-              <li><a class="small" href="/archive">Archive</a></li>
-            
-          
-            
-              <li><a class="small" href="/contact">Contact</a></li>
-            
-          
-        </ul>
-        <div class="below-header">
-          <div class="hr"></div>
-          <img src="https://farm6.staticflickr.com/5831/20836963561_b5d4186595_o_d.jpg" alt="" class="zebra_image">
-          <div class="hr"></div>
-        </div>
-      </header>
-
-      <main>
-        <div class="posts">
-  
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/2016/06/19/sorted-union/">
-        Algorithm Scripting -- Sorted Union
-      </a>
-    </h1>
-
-    <time datetime="2016-06-19T00:00:00-07:00" class="post-date">19 Jun 2016</time>
-
-    <p>Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my <a href="/projects">projects page</a>).</p>
+I"��<p>Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my <a href="/projects">projects page</a>).</p>
 
 <p>But I would also like to return to some of the algorithms that make up Free Code Camp’s earliest challenges. I remember solving a lot of these challenges by resorting to heavily nested for loops, an operation flow that’s as computationally taxing as it is difficult to read.</p>
 
@@ -94,7 +16,7 @@
   <p>The unique numbers should be sorted by their original order, but the final array should not be sorted in numerical order.</p>
 </blockquote>
 
-<p>As usual with Free Code Camp’s algorithm challenges, the challenge description is a little hard to understand. Fortunately, the test assertions provide a good indicator about what is being asked (<code class="language-plaintext highlighter-rouge">uniteUnique</code> is the name of the function we’re being asked to create):</p>
+<p>As usual with Free Code Camp’s algorithm challenges, the challenge description is a little hard to understand. Fortunately, the test assertions provide a good indicator about what is being asked (<code class="highlighter-rouge">uniteUnique</code> is the name of the function we’re being asked to create):</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// I'm using the expect testing library to frame these assertions.</span>
 
@@ -106,24 +28,24 @@
   <span class="nx">uniteUnique</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
 <span class="p">).</span><span class="nx">toEqual</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span></code></pre></figure>
 
-<p>Basically, the idea here is that <code class="language-plaintext highlighter-rouge">uniteUnique</code> will take some arrays as arguments and return a single array filled with unique elements found in each of the passed in arrays. Moreover, the items in the array that gets returned must be in the order of their original placement. There’s one last thing worth mentioning thing that’s not said in the description but is made explicit from the test assertions: <code class="language-plaintext highlighter-rouge">uniteUnique</code> is a shallow operation, applying to only the arguments and not to any arrays that may be found within them.</p>
+<p>Basically, the idea here is that <code class="highlighter-rouge">uniteUnique</code> will take some arrays as arguments and return a single array filled with unique elements found in each of the passed in arrays. Moreover, the items in the array that gets returned must be in the order of their original placement. There’s one last thing worth mentioning thing that’s not said in the description but is made explicit from the test assertions: <code class="highlighter-rouge">uniteUnique</code> is a shallow operation, applying to only the arguments and not to any arrays that may be found within them.</p>
 
-<p>How do we solve this? First <code class="language-plaintext highlighter-rouge">uniteUnique</code> needs to create an empty array to which it is going to push each unique element it encounters among the arguments (this array will be returned at the end of the function). Determining the uniqueness of elements is going to require creating a nested loop: the outer loop will iterate through the arrays that get passed in as arguments, while the inner loop will iterate over each individual array to examine the elements that need to get pushed to the array that will be returned. Structured in a conventional manner, there is no need to worry about sorting because the elements will get pushed to the empty array in the order in which they are encountered.</p>
+<p>How do we solve this? First <code class="highlighter-rouge">uniteUnique</code> needs to create an empty array to which it is going to push each unique element it encounters among the arguments (this array will be returned at the end of the function). Determining the uniqueness of elements is going to require creating a nested loop: the outer loop will iterate through the arrays that get passed in as arguments, while the inner loop will iterate over each individual array to examine the elements that need to get pushed to the array that will be returned. Structured in a conventional manner, there is no need to worry about sorting because the elements will get pushed to the empty array in the order in which they are encountered.</p>
 
-<p>On to implementation. We might initially set up the <code class="language-plaintext highlighter-rouge">uniteUnique</code> function like so, initially declaring an empty array (<code class="language-plaintext highlighter-rouge">out</code>):</p>
+<p>On to implementation. We might initially set up the <code class="highlighter-rouge">uniteUnique</code> function like so, initially declaring an empty array (<code class="highlighter-rouge">out</code>):</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="c1">// Our soon to be written loops</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Did you notice how I didn’t write in any parameters? According to the specification <code class="language-plaintext highlighter-rouge">uniteUnique</code>, can take any number of arguments, a requirement that complicates the traditional approach of handling arguments by way of parameter names. So how do we access the arguments that get passed to <code class="language-plaintext highlighter-rouge">uniteUnique</code> if we don’t know what to call them and we don’t know how many there are?</p>
+<p>Did you notice how I didn’t write in any parameters? According to the specification <code class="highlighter-rouge">uniteUnique</code>, can take any number of arguments, a requirement that complicates the traditional approach of handling arguments by way of parameter names. So how do we access the arguments that get passed to <code class="highlighter-rouge">uniteUnique</code> if we don’t know what to call them and we don’t know how many there are?</p>
 
-<p>Functions in javascript have access to something called <code class="language-plaintext highlighter-rouge">arguments</code>, an array-like object that refers to the arguments handed to the function. This is convenient, you might think, because the first of our nested loops involves looping over the arguments! Isn’t it nice that the <code class="language-plaintext highlighter-rouge">arguments</code> is an iterable object?</p>
+<p>Functions in javascript have access to something called <code class="highlighter-rouge">arguments</code>, an array-like object that refers to the arguments handed to the function. This is convenient, you might think, because the first of our nested loops involves looping over the arguments! Isn’t it nice that the <code class="highlighter-rouge">arguments</code> is an iterable object?</p>
 
-<p>Not so fast. Because we want to lean towards semantic clarity, we’re going to want to make use of something like <code class="language-plaintext highlighter-rouge">forEach</code> rather than a traditional for loop. Unfortunately for us, <code class="language-plaintext highlighter-rouge">arguments</code> is array-like, meaning it’s not a true array and is therefore not on the prototype chain that would grant access to <code class="language-plaintext highlighter-rouge">forEach</code>. We need to figure out a way of turning <code class="language-plaintext highlighter-rouge">arguments</code> from an array-like object into an actual array.</p>
+<p>Not so fast. Because we want to lean towards semantic clarity, we’re going to want to make use of something like <code class="highlighter-rouge">forEach</code> rather than a traditional for loop. Unfortunately for us, <code class="highlighter-rouge">arguments</code> is array-like, meaning it’s not a true array and is therefore not on the prototype chain that would grant access to <code class="highlighter-rouge">forEach</code>. We need to figure out a way of turning <code class="highlighter-rouge">arguments</code> from an array-like object into an actual array.</p>
 
-<p>Do you know how to copy an array? Consider the following snippet in which we attempt to clone array <code class="language-plaintext highlighter-rouge">a</code>:</p>
+<p>Do you know how to copy an array? Consider the following snippet in which we attempt to clone array <code class="highlighter-rouge">a</code>:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
@@ -133,9 +55,9 @@
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span></code></pre></figure>
 
-<p>What gives? We pushed <code class="language-plaintext highlighter-rouge">4</code> onto <code class="language-plaintext highlighter-rouge">b</code> not <code class="language-plaintext highlighter-rouge">a</code>! The problem is that <code class="language-plaintext highlighter-rouge">b = a</code> does not actually do what we wanted it to do. What we wanted was for <code class="language-plaintext highlighter-rouge">b</code> to get assigned to completely new array that was filled with the same values stored in <code class="language-plaintext highlighter-rouge">a</code>. Instead, we simply pointed <code class="language-plaintext highlighter-rouge">b</code> to <code class="language-plaintext highlighter-rouge">a</code>, meaning that they both now refer to the same object. Hence, using <code class="language-plaintext highlighter-rouge">push</code> to add a value to <code class="language-plaintext highlighter-rouge">b</code> will mutate the array that <code class="language-plaintext highlighter-rouge">a</code> also happens to be pointing at.</p>
+<p>What gives? We pushed <code class="highlighter-rouge">4</code> onto <code class="highlighter-rouge">b</code> not <code class="highlighter-rouge">a</code>! The problem is that <code class="highlighter-rouge">b = a</code> does not actually do what we wanted it to do. What we wanted was for <code class="highlighter-rouge">b</code> to get assigned to completely new array that was filled with the same values stored in <code class="highlighter-rouge">a</code>. Instead, we simply pointed <code class="highlighter-rouge">b</code> to <code class="highlighter-rouge">a</code>, meaning that they both now refer to the same object. Hence, using <code class="highlighter-rouge">push</code> to add a value to <code class="highlighter-rouge">b</code> will mutate the array that <code class="highlighter-rouge">a</code> also happens to be pointing at.</p>
 
-<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code class="language-plaintext highlighter-rouge">slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code class="language-plaintext highlighter-rouge">slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
+<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code class="highlighter-rouge">slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code class="highlighter-rouge">slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span>
@@ -145,13 +67,13 @@
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3]</span></code></pre></figure>
 
-<p>Okay, so we can use <code class="language-plaintext highlighter-rouge">slice</code> to make a clone of <code class="language-plaintext highlighter-rouge">arguments</code>. But if <code class="language-plaintext highlighter-rouge">arguments</code> isn’t already an array, how are we going to call <code class="language-plaintext highlighter-rouge">slice</code> on it? The reason we couldn’t call <code class="language-plaintext highlighter-rouge">forEach</code> on <code class="language-plaintext highlighter-rouge">arguments</code> was because <code class="language-plaintext highlighter-rouge">forEach</code> is on the prototype chain of Array. Isn’t <code class="language-plaintext highlighter-rouge">slice</code> also on the same prototype chain?</p>
+<p>Okay, so we can use <code class="highlighter-rouge">slice</code> to make a clone of <code class="highlighter-rouge">arguments</code>. But if <code class="highlighter-rouge">arguments</code> isn’t already an array, how are we going to call <code class="highlighter-rouge">slice</code> on it? The reason we couldn’t call <code class="highlighter-rouge">forEach</code> on <code class="highlighter-rouge">arguments</code> was because <code class="highlighter-rouge">forEach</code> is on the prototype chain of Array. Isn’t <code class="highlighter-rouge">slice</code> also on the same prototype chain?</p>
 
-<p>All this is entirely correct, and indeed using slice directly from <code class="language-plaintext highlighter-rouge">arguments</code> would fail. Fortunately, however, we can use <code class="language-plaintext highlighter-rouge">call</code> to shift the <code class="language-plaintext highlighter-rouge">this</code> context of <code class="language-plaintext highlighter-rouge">slice</code> so that it will work properly. This means writing some intimidating code that invokes <code class="language-plaintext highlighter-rouge">slice</code> directly from <code class="language-plaintext highlighter-rouge">Array.prototype</code> and then chains it to <code class="language-plaintext highlighter-rouge">call</code>, but I assure you this is well-traversed territory for many javascript developers (see <a href="https://davidwalsh.name/arguments-array">this post</a> for additional details).</p>
+<p>All this is entirely correct, and indeed using slice directly from <code class="highlighter-rouge">arguments</code> would fail. Fortunately, however, we can use <code class="highlighter-rouge">call</code> to shift the <code class="highlighter-rouge">this</code> context of <code class="highlighter-rouge">slice</code> so that it will work properly. This means writing some intimidating code that invokes <code class="highlighter-rouge">slice</code> directly from <code class="highlighter-rouge">Array.prototype</code> and then chains it to <code class="highlighter-rouge">call</code>, but I assure you this is well-traversed territory for many javascript developers (see <a href="https://davidwalsh.name/arguments-array">this post</a> for additional details).</p>
 
-<p><em>*** It should also be noted that using <code class="language-plaintext highlighter-rouge">slice</code> on <code class="language-plaintext highlighter-rouge">arguments</code> obstructs optimizations in some engines. You can read about an alternative approach <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments">here</a> ***</em></p>
+<p><em>*** It should also be noted that using <code class="highlighter-rouge">slice</code> on <code class="highlighter-rouge">arguments</code> obstructs optimizations in some engines. You can read about an alternative approach <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments">here</a> ***</em></p>
 
-<p>We now have a way of transforming <code class="language-plaintext highlighter-rouge">arguments</code> into an actual array, so let’s write it into <code class="language-plaintext highlighter-rouge">uniqueUpdate</code>:</p>
+<p>We now have a way of transforming <code class="highlighter-rouge">arguments</code> into an actual array, so let’s write it into <code class="highlighter-rouge">uniqueUpdate</code>:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
@@ -159,7 +81,7 @@
   <span class="c1">// Our soon to be written loops</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The next bit is easy. Here’s how we would use <code class="language-plaintext highlighter-rouge">forEach</code> to loop over <code class="language-plaintext highlighter-rouge">args</code> (our <code class="language-plaintext highlighter-rouge">arguments</code> clone):</p>
+<p>The next bit is easy. Here’s how we would use <code class="highlighter-rouge">forEach</code> to loop over <code class="highlighter-rouge">args</code> (our <code class="highlighter-rouge">arguments</code> clone):</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
@@ -171,7 +93,7 @@
   <span class="p">});</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Next, we need to add another <code class="language-plaintext highlighter-rouge">forEach</code> loop that iterates over the individual element of each argument, which would look something like this:</p>
+<p>Next, we need to add another <code class="highlighter-rouge">forEach</code> loop that iterates over the individual element of each argument, which would look something like this:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
@@ -186,11 +108,11 @@
   <span class="p">});</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Now that we have the loops settled, we now need to create some type of test that will determine whether or not an individual element needs to be added to the array that will ultimately get returned (assigned to the variable <code class="language-plaintext highlighter-rouge">out</code> in our function). According to the instructions, <code class="language-plaintext highlighter-rouge">uniteUnique</code> must return only unique elements. This means, for example, that if among our arguments there exists multiple instances of the value <code class="language-plaintext highlighter-rouge">5</code>, only the first of those instances should be added to <code class="language-plaintext highlighter-rouge">out</code>.</p>
+<p>Now that we have the loops settled, we now need to create some type of test that will determine whether or not an individual element needs to be added to the array that will ultimately get returned (assigned to the variable <code class="highlighter-rouge">out</code> in our function). According to the instructions, <code class="highlighter-rouge">uniteUnique</code> must return only unique elements. This means, for example, that if among our arguments there exists multiple instances of the value <code class="highlighter-rouge">5</code>, only the first of those instances should be added to <code class="highlighter-rouge">out</code>.</p>
 
-<p>Since we are traversing the arguments and their elements sequentially, we can test each value for uniqueness simply by checking to see if it is already present in the <code class="language-plaintext highlighter-rouge">out</code> array. This is doubly useful because it also ensures that unique elements are added as they are encountered, meaning that the elements in <code class="language-plaintext highlighter-rouge">out</code> will be in the correct order.</p>
+<p>Since we are traversing the arguments and their elements sequentially, we can test each value for uniqueness simply by checking to see if it is already present in the <code class="highlighter-rouge">out</code> array. This is doubly useful because it also ensures that unique elements are added as they are encountered, meaning that the elements in <code class="highlighter-rouge">out</code> will be in the correct order.</p>
 
-<p>We can check if an element is in an array by using the <code class="language-plaintext highlighter-rouge">indexOf</code> property. <code class="language-plaintext highlighter-rouge">indexOf</code> will return the index of a given value in the array it is called on. In instances when the value is not found, it will return <code class="language-plaintext highlighter-rouge">-1</code>. Using <code class="language-plaintext highlighter-rouge">indexOf</code> we can now write the test case that will add elements to out like so:</p>
+<p>We can check if an element is in an array by using the <code class="highlighter-rouge">indexOf</code> property. <code class="highlighter-rouge">indexOf</code> will return the index of a given value in the array it is called on. In instances when the value is not found, it will return <code class="highlighter-rouge">-1</code>. Using <code class="highlighter-rouge">indexOf</code> we can now write the test case that will add elements to out like so:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
@@ -206,7 +128,7 @@
   <span class="p">});</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>We have now completed the logic that will add unique values to the <code class="language-plaintext highlighter-rouge">out</code> array. The only thing left to do is return it:</p>
+<p>We have now completed the logic that will add unique values to the <code class="highlighter-rouge">out</code> array. The only thing left to do is return it:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
    <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
@@ -225,13 +147,13 @@
  <span class="p">}</span>
  </code></pre></figure>
 
-<h3 id="refactoring-with-reduce">Refactoring with <code class="language-plaintext highlighter-rouge">reduce</code></h3>
+<h3 id="refactoring-with-reduce">Refactoring with <code class="highlighter-rouge">reduce</code></h3>
 
-<p>As it currently exists <code class="language-plaintext highlighter-rouge">uniteUnique</code> is perfectly functional. Notice, however, that our logic involves filling an initially empty array that potentially mutates each time our loops advance. You should know that any time you write a <code class="language-plaintext highlighter-rouge">forEach</code> loop that adds items to an array you are overlooking an opportunity to use <code class="language-plaintext highlighter-rouge">reduce</code> instead.</p>
+<p>As it currently exists <code class="highlighter-rouge">uniteUnique</code> is perfectly functional. Notice, however, that our logic involves filling an initially empty array that potentially mutates each time our loops advance. You should know that any time you write a <code class="highlighter-rouge">forEach</code> loop that adds items to an array you are overlooking an opportunity to use <code class="highlighter-rouge">reduce</code> instead.</p>
 
-<p><code class="language-plaintext highlighter-rouge">reduce</code>, like <code class="language-plaintext highlighter-rouge">forEach</code>, loops over an array performing a callback with each iteration. Unlike <code class="language-plaintext highlighter-rouge">forEach</code>, however, the callback given to <code class="language-plaintext highlighter-rouge">reduce</code> requires that something is returned, a value that will be provided to the next iteration of the loop. Basically <code class="language-plaintext highlighter-rouge">reduce</code> gives us a way of gradually building something up over the course of looping through an array’s elements.</p>
+<p><code class="highlighter-rouge">reduce</code>, like <code class="highlighter-rouge">forEach</code>, loops over an array performing a callback with each iteration. Unlike <code class="highlighter-rouge">forEach</code>, however, the callback given to <code class="highlighter-rouge">reduce</code> requires that something is returned, a value that will be provided to the next iteration of the loop. Basically <code class="highlighter-rouge">reduce</code> gives us a way of gradually building something up over the course of looping through an array’s elements.</p>
 
-<p>Consider the classic demonstration of using <code class="language-plaintext highlighter-rouge">reduce</code> to get the sum of an array of numbers. With <code class="language-plaintext highlighter-rouge">forEach</code>, we would write the following code that increments a counter by each number in the array:</p>
+<p>Consider the classic demonstration of using <code class="highlighter-rouge">reduce</code> to get the sum of an array of numbers. With <code class="highlighter-rouge">forEach</code>, we would write the following code that increments a counter by each number in the array:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
 
@@ -243,7 +165,7 @@
 
 <span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></figure>
 
-<p>We can rewrite this code using <code class="language-plaintext highlighter-rouge">reduce</code> like so:</p>
+<p>We can rewrite this code using <code class="highlighter-rouge">reduce</code> like so:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
 
@@ -253,13 +175,13 @@
 
 <span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></figure>
 
-<p>The callback function handed to <code class="language-plaintext highlighter-rouge">reduce</code> receives two arguments, what I’ve called <code class="language-plaintext highlighter-rouge">accumulator</code> and <code class="language-plaintext highlighter-rouge">currentNumber</code>. <code class="language-plaintext highlighter-rouge">accumulator</code> refers to the value that was returned by the callback on the previous iteration (notice how the callback returns a value, unlike <code class="language-plaintext highlighter-rouge">forEach</code>).<code class="language-plaintext highlighter-rouge">currentNumber</code> refers to the item in the array that is currently being examined. The <code class="language-plaintext highlighter-rouge">0</code> that is passed in as the second argument to <code class="language-plaintext highlighter-rouge">reduce</code> refers to the value <code class="language-plaintext highlighter-rouge">accumulator</code> should assume the first time the callback is run.</p>
+<p>The callback function handed to <code class="highlighter-rouge">reduce</code> receives two arguments, what I’ve called <code class="highlighter-rouge">accumulator</code> and <code class="highlighter-rouge">currentNumber</code>. <code class="highlighter-rouge">accumulator</code> refers to the value that was returned by the callback on the previous iteration (notice how the callback returns a value, unlike <code class="highlighter-rouge">forEach</code>).<code class="highlighter-rouge">currentNumber</code> refers to the item in the array that is currently being examined. The <code class="highlighter-rouge">0</code> that is passed in as the second argument to <code class="highlighter-rouge">reduce</code> refers to the value <code class="highlighter-rouge">accumulator</code> should assume the first time the callback is run.</p>
 
-<p>Taking this step-by-step, the first time <code class="language-plaintext highlighter-rouge">reduce</code> runs, <code class="language-plaintext highlighter-rouge">accumulator</code> is set to <code class="language-plaintext highlighter-rouge">0</code> and <code class="language-plaintext highlighter-rouge">currentNumber</code> is set to <code class="language-plaintext highlighter-rouge">1</code>. The callback returns the sum of these two numbers, which becomes the <code class="language-plaintext highlighter-rouge">accumulator</code> for the second iteration when <code class="language-plaintext highlighter-rouge">2</code> will be assigned to <code class="language-plaintext highlighter-rouge">currentNumber</code>. In that case, the callback will return <code class="language-plaintext highlighter-rouge">3</code>, which becomes the <code class="language-plaintext highlighter-rouge">accumulator</code> for the next cycle, and so on. In this way, all the numbers are added together resulting in <code class="language-plaintext highlighter-rouge">15</code> (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">MDN article</a> on <code class="language-plaintext highlighter-rouge">reduce</code> to learn more).</p>
+<p>Taking this step-by-step, the first time <code class="highlighter-rouge">reduce</code> runs, <code class="highlighter-rouge">accumulator</code> is set to <code class="highlighter-rouge">0</code> and <code class="highlighter-rouge">currentNumber</code> is set to <code class="highlighter-rouge">1</code>. The callback returns the sum of these two numbers, which becomes the <code class="highlighter-rouge">accumulator</code> for the second iteration when <code class="highlighter-rouge">2</code> will be assigned to <code class="highlighter-rouge">currentNumber</code>. In that case, the callback will return <code class="highlighter-rouge">3</code>, which becomes the <code class="highlighter-rouge">accumulator</code> for the next cycle, and so on. In this way, all the numbers are added together resulting in <code class="highlighter-rouge">15</code> (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">MDN article</a> on <code class="highlighter-rouge">reduce</code> to learn more).</p>
 
-<p><code class="language-plaintext highlighter-rouge">reduce</code> is a handy function. Its syntax is a little tricky to get a handle of, but once you have it all figured out you’ll find it to be useful way of applying a compounding function on all the elements of an array, ultimately ‘reducing’ it to some final result.</p>
+<p><code class="highlighter-rouge">reduce</code> is a handy function. Its syntax is a little tricky to get a handle of, but once you have it all figured out you’ll find it to be useful way of applying a compounding function on all the elements of an array, ultimately ‘reducing’ it to some final result.</p>
 
-<p>In our case, we can substitute initializing <code class="language-plaintext highlighter-rouge">out</code> to an empty array by assigning it directly to a reducing function that builds an array of unique elements found in the arguments:</p>
+<p>In our case, we can substitute initializing <code class="highlighter-rouge">out</code> to an empty array by assigning it directly to a reducing function that builds an array of unique elements found in the arguments:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
@@ -276,7 +198,7 @@
   <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>In fact, since the callback we are handing to <code class="language-plaintext highlighter-rouge">reduce</code> returns an array, we can dispense with assigning the result to <code class="language-plaintext highlighter-rouge">out</code> and just return it directly:</p>
+<p>In fact, since the callback we are handing to <code class="highlighter-rouge">reduce</code> returns an array, we can dispense with assigning the result to <code class="highlighter-rouge">out</code> and just return it directly:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
@@ -294,13 +216,13 @@
 
 <h3 id="wrapping-up">Wrapping up</h3>
 
-<p>Before closing, there are three additional points I want to make regarding <code class="language-plaintext highlighter-rouge">uniteUnique</code>. When it comes to completing algorithm challenges like this, you’ll find that there are many different ways to achieve the desired outcome. Sometimes you’ll encounter overly complicated solutions with lots of nested for loops and counters. Other times you’ll read one-liners that make use of method chaining and regex tests. As a rule of thumb, I recommend striving for a solution that balances clarity with performance. You certainly want to avoid writing functions replete with taxing operations, but I also think it’s important to avoid single-line solutions that are especially cryptic.</p>
+<p>Before closing, there are three additional points I want to make regarding <code class="highlighter-rouge">uniteUnique</code>. When it comes to completing algorithm challenges like this, you’ll find that there are many different ways to achieve the desired outcome. Sometimes you’ll encounter overly complicated solutions with lots of nested for loops and counters. Other times you’ll read one-liners that make use of method chaining and regex tests. As a rule of thumb, I recommend striving for a solution that balances clarity with performance. You certainly want to avoid writing functions replete with taxing operations, but I also think it’s important to avoid single-line solutions that are especially cryptic.</p>
 
 <p>On that note, here are three additional ways of rewriting the above solution.</p>
 
-<p>First, you might have wondered we used <code class="language-plaintext highlighter-rouge">call</code> to access the <code class="language-plaintext highlighter-rouge">slice</code> method for <code class="language-plaintext highlighter-rouge">arguments</code> when we could have done the same thing for <code class="language-plaintext highlighter-rouge">reduce</code> (or <code class="language-plaintext highlighter-rouge">forEach</code>). In that case, there would be no need to create an <code class="language-plaintext highlighter-rouge">args</code> variable at the top of our function.</p>
+<p>First, you might have wondered we used <code class="highlighter-rouge">call</code> to access the <code class="highlighter-rouge">slice</code> method for <code class="highlighter-rouge">arguments</code> when we could have done the same thing for <code class="highlighter-rouge">reduce</code> (or <code class="highlighter-rouge">forEach</code>). In that case, there would be no need to create an <code class="highlighter-rouge">args</code> variable at the top of our function.</p>
 
-<p>Indeed, using <code class="language-plaintext highlighter-rouge">call</code> directly with <code class="language-plaintext highlighter-rouge">reduce</code> (or <code class="language-plaintext highlighter-rouge">forEach</code>) and <code class="language-plaintext highlighter-rouge">arguments</code> will work just fine. It would look something like this:</p>
+<p>Indeed, using <code class="highlighter-rouge">call</code> directly with <code class="highlighter-rouge">reduce</code> (or <code class="highlighter-rouge">forEach</code>) and <code class="highlighter-rouge">arguments</code> will work just fine. It would look something like this:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reduce</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span>
@@ -315,9 +237,9 @@
 <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>This is a little too messy for my tastes. I begin to worry that my code is becoming unreadable once its shape starts resembling a sideways pyramid. This solution manages to bypass crafting an actual array from the array-like <code class="language-plaintext highlighter-rouge">arguments</code> object, but I don’t think trading in that small operation for this hard-to-read cascade of indented code is worth it.</p>
+<p>This is a little too messy for my tastes. I begin to worry that my code is becoming unreadable once its shape starts resembling a sideways pyramid. This solution manages to bypass crafting an actual array from the array-like <code class="highlighter-rouge">arguments</code> object, but I don’t think trading in that small operation for this hard-to-read cascade of indented code is worth it.</p>
 
-<p><code class="language-plaintext highlighter-rouge">reduce</code> is definitely the way to go when it comes to managing our outer loop, but <code class="language-plaintext highlighter-rouge">forEach</code> is not our only option when it comes to the inner one. The <a href="https://www.freecodecamp.com/challenges/sorted-union#?solution=function%20uniteUnique(arr)%20%7B%0A%20%20var%20args%20%3D%20Array.prototype.slice.call(arguments)%3B%0A%20%20return%20args.reduce(function(accum%2C%20curr)%20%7B%0A%20%20%20%20return%20accum.concat(curr.filter(function(item)%20%7B%0A%20%20%20%20%20%20return%20accum.indexOf(item)%20%3C%200%3B%20%20%0A%20%20%20%20%7D))%3B%0A%20%20%7D%2C%20%5B%5D)%3B%0A%7D%0A%0AuniteUnique(%5B1%2C%203%2C%202%5D%2C%20%5B5%2C%202%2C%201%2C%204%5D%2C%20%5B2%2C%201%5D)%3B%0A">solution I submitted to Free Code Camp</a> involves using the <code class="language-plaintext highlighter-rouge">filter</code> method on the <code class="language-plaintext highlighter-rouge">currentArg</code> array to get an array of unique elements, the contents of which are then added the <code class="language-plaintext highlighter-rouge">accumulator</code> array by way of <code class="language-plaintext highlighter-rouge">concat</code>. It looks like this (we don’t actually need the empty array that makes up the second argument to<code class="language-plaintext highlighter-rouge">reduce</code>, by the way; it’s perfectly fine that the initial array in <code class="language-plaintext highlighter-rouge">args</code> be our first <code class="language-plaintext highlighter-rouge">accumulator</code>, which is what will happen if we leave it absent like below):</p>
+<p><code class="highlighter-rouge">reduce</code> is definitely the way to go when it comes to managing our outer loop, but <code class="highlighter-rouge">forEach</code> is not our only option when it comes to the inner one. The <a href="https://www.freecodecamp.com/challenges/sorted-union#?solution=function%20uniteUnique(arr)%20%7B%0A%20%20var%20args%20%3D%20Array.prototype.slice.call(arguments)%3B%0A%20%20return%20args.reduce(function(accum%2C%20curr)%20%7B%0A%20%20%20%20return%20accum.concat(curr.filter(function(item)%20%7B%0A%20%20%20%20%20%20return%20accum.indexOf(item)%20%3C%200%3B%20%20%0A%20%20%20%20%7D))%3B%0A%20%20%7D%2C%20%5B%5D)%3B%0A%7D%0A%0AuniteUnique(%5B1%2C%203%2C%202%5D%2C%20%5B5%2C%202%2C%201%2C%204%5D%2C%20%5B2%2C%201%5D)%3B%0A">solution I submitted to Free Code Camp</a> involves using the <code class="highlighter-rouge">filter</code> method on the <code class="highlighter-rouge">currentArg</code> array to get an array of unique elements, the contents of which are then added the <code class="highlighter-rouge">accumulator</code> array by way of <code class="highlighter-rouge">concat</code>. It looks like this (we don’t actually need the empty array that makes up the second argument to<code class="highlighter-rouge">reduce</code>, by the way; it’s perfectly fine that the initial array in <code class="highlighter-rouge">args</code> be our first <code class="highlighter-rouge">accumulator</code>, which is what will happen if we leave it absent like below):</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
@@ -329,7 +251,7 @@
   <span class="p">});</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Those nested return statements (and the <code class="language-plaintext highlighter-rouge">concat</code> and <code class="language-plaintext highlighter-rouge">filter</code> combo) are a little strange looking, but fortunately ES6 syntax helps make things look a little better:</p>
+<p>Those nested return statements (and the <code class="highlighter-rouge">concat</code> and <code class="highlighter-rouge">filter</code> combo) are a little strange looking, but fortunately ES6 syntax helps make things look a little better:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
@@ -339,27 +261,4 @@
     <span class="p">...</span><span class="nx">currentArg</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)]);</span>
 <span class="p">}</span></code></pre></figure>
 
-
-  </article>
-  
-</div>
-
-<div class="pagination">
-  
-    <a class="pagination-item older" href="/page3">Previous Post</a>
-  
-  
-    <a class="pagination-item newer" href="/">Next Post</a>
-  
-</div>
-
-      </main>
-
-      <footer class="footer">
-        <small>
-          &copy; <time datetime="2019-12-12T14:52:24-08:00">2019</time>. All rights reserved.
-        </small>
-      </footer>
-    </div>
-  </body>
-</html>
+:ET
