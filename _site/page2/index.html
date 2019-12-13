@@ -69,276 +69,233 @@
   
   <article class="post">
     <h1 class="post-title">
-      <a href="/2016/06/19/sorted-union/">
-        Algorithm Scripting -- Sorted Union
+      <a href="/2016/06/25/group-by/">
+        Algorithm Scripting -- Group By
       </a>
     </h1>
 
-    <time datetime="2016-06-19T00:00:00-07:00" class="post-date">19 Jun 2016</time>
+    <time datetime="2016-06-25T00:00:00-07:00" class="post-date">25 Jun 2016</time>
 
-    <p>Now that I’ve completed the first two tracks in Free Code Camp’s curriculum, lately I’ve been returning to some of my prior work to refactor the code I had submitted. So far this has meant reengineering some of my earliest projects to take advantage of React (see the weather application and the pomodoro timer on my <a href="/projects">projects page</a>).</p>
+    <p>In the <a href="/2016/06/19/sorted-union/">last post</a>, I explained how to solve Free Code Camp’s <a href="https://www.freecodecamp.com/challenges/sorted-union">Sorted Union</a> algorithm challenge. Today, I want to talk about a <a href="https://www.codewars.com">Codewars</a> algorithm challenge that I recently submitted a solution for.</p>
 
-<p>But I would also like to return to some of the algorithms that make up Free Code Camp’s earliest challenges. I remember solving a lot of these challenges by resorting to heavily nested for loops, an operation flow that’s as computationally taxing as it is difficult to read.</p>
+<h3 id="the-challenge-arrayprototypegroupby">The challenge: Array.prototype.groupBy</h3>
 
-<p>I want to devote at least few posts revising some of these algorithms and explaining my solutions. Taken together, I hope these posts will be a good demonstration of my particular approach to problem solving and may help new developers who are struggling in this area.</p>
-
-<h3 id="the-challenge-sorted-union">The challenge: sorted union</h3>
-
-<p>For this first post, I want to focus on <a href="https://www.freecodecamp.com/challenges/sorted-union">Sorted Union</a>, an algorithm challenge that was recently posted about in the <a href="http://forum.freecodecamp.com/">Free Code Camp forum</a>. Here’s a description of the challenge from the Free Code Camp website:</p>
+<p>Here’s a description of the challenge from the Codewars website:</p>
 
 <blockquote>
-  <p>Write a function that takes two or more arrays and returns a new array of unique values in the order of the original provided arrays.</p>
+  <p>Add a groupBy method to Array.prototype so that elements in an array could be grouped by the result of evaluating a function on each element.</p>
 
-  <p>In other words, all values present from all arrays should be included in their original order, but with no duplicates in the final array.</p>
+  <p>The method should return an object, in which for each different value returned by the function there is a property whose value is the array of elements that return the same value.</p>
 
-  <p>The unique numbers should be sorted by their original order, but the final array should not be sorted in numerical order.</p>
+  <p>If no function is passed, the element itself should be taken.</p>
 </blockquote>
 
-<p>As usual with Free Code Camp’s algorithm challenges, the challenge description is a little hard to understand. Fortunately, the test assertions provide a good indicator about what is being asked (<code class="language-plaintext highlighter-rouge">uniteUnique</code> is the name of the function we’re being asked to create):</p>
+<p>These examples are provided to illustrate the concept:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// I'm using the expect testing library to frame these assertions.</span>
 
 <span class="nx">expect</span><span class="p">(</span>
-  <span class="nx">uniteUnique</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="p">).</span><span class="nx">toEqual</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
-
-<span class="nx">expect</span><span class="p">(</span>
-  <span class="nx">uniteUnique</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
-<span class="p">).</span><span class="nx">toEqual</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span></code></pre></figure>
-
-<p>Basically, the idea here is that <code class="language-plaintext highlighter-rouge">uniteUnique</code> will take some arrays as arguments and return a single array filled with unique elements found in each of the passed in arrays. Moreover, the items in the array that gets returned must be in the order of their original placement. There’s one last thing worth mentioning thing that’s not said in the description but is made explicit from the test assertions: <code class="language-plaintext highlighter-rouge">uniteUnique</code> is a shallow operation, applying to only the arguments and not to any arrays that may be found within them.</p>
-
-<p>How do we solve this? First <code class="language-plaintext highlighter-rouge">uniteUnique</code> needs to create an empty array to which it is going to push each unique element it encounters among the arguments (this array will be returned at the end of the function). Determining the uniqueness of elements is going to require creating a nested loop: the outer loop will iterate through the arrays that get passed in as arguments, while the inner loop will iterate over each individual array to examine the elements that need to get pushed to the array that will be returned. Structured in a conventional manner, there is no need to worry about sorting because the elements will get pushed to the empty array in the order in which they are encountered.</p>
-
-<p>On to implementation. We might initially set up the <code class="language-plaintext highlighter-rouge">uniteUnique</code> function like so, initially declaring an empty array (<code class="language-plaintext highlighter-rouge">out</code>):</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="c1">// Our soon to be written loops</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>Did you notice how I didn’t write in any parameters? According to the specification <code class="language-plaintext highlighter-rouge">uniteUnique</code>, can take any number of arguments, a requirement that complicates the traditional approach of handling arguments by way of parameter names. So how do we access the arguments that get passed to <code class="language-plaintext highlighter-rouge">uniteUnique</code> if we don’t know what to call them and we don’t know how many there are?</p>
-
-<p>Functions in javascript have access to something called <code class="language-plaintext highlighter-rouge">arguments</code>, an array-like object that refers to the arguments handed to the function. This is convenient, you might think, because the first of our nested loops involves looping over the arguments! Isn’t it nice that the <code class="language-plaintext highlighter-rouge">arguments</code> is an iterable object?</p>
-
-<p>Not so fast. Because we want to lean towards semantic clarity, we’re going to want to make use of something like <code class="language-plaintext highlighter-rouge">forEach</code> rather than a traditional for loop. Unfortunately for us, <code class="language-plaintext highlighter-rouge">arguments</code> is array-like, meaning it’s not a true array and is therefore not on the prototype chain that would grant access to <code class="language-plaintext highlighter-rouge">forEach</code>. We need to figure out a way of turning <code class="language-plaintext highlighter-rouge">arguments</code> from an array-like object into an actual array.</p>
-
-<p>Do you know how to copy an array? Consider the following snippet in which we attempt to clone array <code class="language-plaintext highlighter-rouge">a</code>:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
-
-<span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span></code></pre></figure>
-
-<p>What gives? We pushed <code class="language-plaintext highlighter-rouge">4</code> onto <code class="language-plaintext highlighter-rouge">b</code> not <code class="language-plaintext highlighter-rouge">a</code>! The problem is that <code class="language-plaintext highlighter-rouge">b = a</code> does not actually do what we wanted it to do. What we wanted was for <code class="language-plaintext highlighter-rouge">b</code> to get assigned to completely new array that was filled with the same values stored in <code class="language-plaintext highlighter-rouge">a</code>. Instead, we simply pointed <code class="language-plaintext highlighter-rouge">b</code> to <code class="language-plaintext highlighter-rouge">a</code>, meaning that they both now refer to the same object. Hence, using <code class="language-plaintext highlighter-rouge">push</code> to add a value to <code class="language-plaintext highlighter-rouge">b</code> will mutate the array that <code class="language-plaintext highlighter-rouge">a</code> also happens to be pointing at.</p>
-
-<p>The best way to rewrite this code so that it actually achieves the intended outcome is to make use of <code class="language-plaintext highlighter-rouge">slice</code>, a non-mutating function that returns a specified part of an array. The part of the array that gets returned when you call <code class="language-plaintext highlighter-rouge">slice</code> without passing any arguments is the entire array, creating what is essentially a copy of the array slice is called from:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span>
-
-<span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// [1,2,3]</span></code></pre></figure>
-
-<p>Okay, so we can use <code class="language-plaintext highlighter-rouge">slice</code> to make a clone of <code class="language-plaintext highlighter-rouge">arguments</code>. But if <code class="language-plaintext highlighter-rouge">arguments</code> isn’t already an array, how are we going to call <code class="language-plaintext highlighter-rouge">slice</code> on it? The reason we couldn’t call <code class="language-plaintext highlighter-rouge">forEach</code> on <code class="language-plaintext highlighter-rouge">arguments</code> was because <code class="language-plaintext highlighter-rouge">forEach</code> is on the prototype chain of Array. Isn’t <code class="language-plaintext highlighter-rouge">slice</code> also on the same prototype chain?</p>
-
-<p>All this is entirely correct, and indeed using slice directly from <code class="language-plaintext highlighter-rouge">arguments</code> would fail. Fortunately, however, we can use <code class="language-plaintext highlighter-rouge">call</code> to shift the <code class="language-plaintext highlighter-rouge">this</code> context of <code class="language-plaintext highlighter-rouge">slice</code> so that it will work properly. This means writing some intimidating code that invokes <code class="language-plaintext highlighter-rouge">slice</code> directly from <code class="language-plaintext highlighter-rouge">Array.prototype</code> and then chains it to <code class="language-plaintext highlighter-rouge">call</code>, but I assure you this is well-traversed territory for many javascript developers (see <a href="https://davidwalsh.name/arguments-array">this post</a> for additional details).</p>
-
-<p><em>*** It should also be noted that using <code class="language-plaintext highlighter-rouge">slice</code> on <code class="language-plaintext highlighter-rouge">arguments</code> obstructs optimizations in some engines. You can read about an alternative approach <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments">here</a> ***</em></p>
-
-<p>We now have a way of transforming <code class="language-plaintext highlighter-rouge">arguments</code> into an actual array, so let’s write it into <code class="language-plaintext highlighter-rouge">uniqueUpdate</code>:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
-  <span class="c1">// Our soon to be written loops</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>The next bit is easy. Here’s how we would use <code class="language-plaintext highlighter-rouge">forEach</code> to loop over <code class="language-plaintext highlighter-rouge">args</code> (our <code class="language-plaintext highlighter-rouge">arguments</code> clone):</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
-
-  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Our soon to be written inner loop.</span>
-  <span class="p">});</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>Next, we need to add another <code class="language-plaintext highlighter-rouge">forEach</code> loop that iterates over the individual element of each argument, which would look something like this:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
-
-  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-      <span class="c1">// Determines whether or not the value should be added</span>
-      <span class="c1">// to the out array  </span>
-    <span class="p">});</span>
-  <span class="p">});</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>Now that we have the loops settled, we now need to create some type of test that will determine whether or not an individual element needs to be added to the array that will ultimately get returned (assigned to the variable <code class="language-plaintext highlighter-rouge">out</code> in our function). According to the instructions, <code class="language-plaintext highlighter-rouge">uniteUnique</code> must return only unique elements. This means, for example, that if among our arguments there exists multiple instances of the value <code class="language-plaintext highlighter-rouge">5</code>, only the first of those instances should be added to <code class="language-plaintext highlighter-rouge">out</code>.</p>
-
-<p>Since we are traversing the arguments and their elements sequentially, we can test each value for uniqueness simply by checking to see if it is already present in the <code class="language-plaintext highlighter-rouge">out</code> array. This is doubly useful because it also ensures that unique elements are added as they are encountered, meaning that the elements in <code class="language-plaintext highlighter-rouge">out</code> will be in the correct order.</p>
-
-<p>We can check if an element is in an array by using the <code class="language-plaintext highlighter-rouge">indexOf</code> property. <code class="language-plaintext highlighter-rouge">indexOf</code> will return the index of a given value in the array it is called on. In instances when the value is not found, it will return <code class="language-plaintext highlighter-rouge">-1</code>. Using <code class="language-plaintext highlighter-rouge">indexOf</code> we can now write the test case that will add elements to out like so:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
-
-  <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">out</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">out</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">});</span>
-  <span class="p">});</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>We have now completed the logic that will add unique values to the <code class="language-plaintext highlighter-rouge">out</code> array. The only thing left to do is return it:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-   <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="p">[];</span>
-
-   <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
-
-   <span class="nx">args</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
-     <span class="nx">arg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-       <span class="k">if</span> <span class="p">(</span><span class="nx">out</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-         <span class="nx">out</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-       <span class="p">}</span>
-     <span class="p">});</span>
-   <span class="p">});</span>
-
-   <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
- <span class="p">}</span>
- </code></pre></figure>
-
-<h3 id="refactoring-with-reduce">Refactoring with <code class="language-plaintext highlighter-rouge">reduce</code></h3>
-
-<p>As it currently exists <code class="language-plaintext highlighter-rouge">uniteUnique</code> is perfectly functional. Notice, however, that our logic involves filling an initially empty array that potentially mutates each time our loops advance. You should know that any time you write a <code class="language-plaintext highlighter-rouge">forEach</code> loop that adds items to an array you are overlooking an opportunity to use <code class="language-plaintext highlighter-rouge">reduce</code> instead.</p>
-
-<p><code class="language-plaintext highlighter-rouge">reduce</code>, like <code class="language-plaintext highlighter-rouge">forEach</code>, loops over an array performing a callback with each iteration. Unlike <code class="language-plaintext highlighter-rouge">forEach</code>, however, the callback given to <code class="language-plaintext highlighter-rouge">reduce</code> requires that something is returned, a value that will be provided to the next iteration of the loop. Basically <code class="language-plaintext highlighter-rouge">reduce</code> gives us a way of gradually building something up over the course of looping through an array’s elements.</p>
-
-<p>Consider the classic demonstration of using <code class="language-plaintext highlighter-rouge">reduce</code> to get the sum of an array of numbers. With <code class="language-plaintext highlighter-rouge">forEach</code>, we would write the following code that increments a counter by each number in the array:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
-
-<span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">counter</span> <span class="o">+=</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">()</span>
+<span class="p">).</span><span class="nx">toEqual</span><span class="p">({</span>
+  <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+  <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+  <span class="mi">4</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+  <span class="mi">5</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+  <span class="mi">6</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">]</span>
 <span class="p">});</span>
 
-<span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></figure>
+<span class="nx">expect</span><span class="p">(</span>
+  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">val</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;}</span> <span class="p">)</span>
+<span class="p">).</span><span class="nx">toEqual</span><span class="p">({</span>
+  <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+  <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+  <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="p">})</span></code></pre></figure>
 
-<p>We can rewrite this code using <code class="language-plaintext highlighter-rouge">reduce</code> like so:</p>
+<p>The description and the examples are pretty clear, so I don’t think there’s any reason to provide a detailed gloss on what is being asked for here. To put it briefly, the idea is to extend <code class="language-plaintext highlighter-rouge">Array.prototype</code> with a method that categorizes an array’s elements according to the value that gets generated when they are passed to a given function. The method should return an object, the structure of which is illustrated by the example cases.</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+<p>The reason I like this challenge is because it gives me a good opportunity to talk about three features of ES6 that I find myself time and again: arrow functions, Object.assign, and the spread operator.</p>
 
-<span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentNumber</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">accumulator</span> <span class="o">+</span> <span class="nx">currentNumber</span><span class="p">;</span>
-<span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+<h3 id="arrayprototype">Array.prototype</h3>
 
-<span class="k">return</span> <span class="nx">counter</span><span class="p">;</span> <span class="c1">// 15</span></code></pre></figure>
+<p>Before we get to those features, however, let’s take a quick look at the first sentence in the challenge description:</p>
 
-<p>The callback function handed to <code class="language-plaintext highlighter-rouge">reduce</code> receives two arguments, what I’ve called <code class="language-plaintext highlighter-rouge">accumulator</code> and <code class="language-plaintext highlighter-rouge">currentNumber</code>. <code class="language-plaintext highlighter-rouge">accumulator</code> refers to the value that was returned by the callback on the previous iteration (notice how the callback returns a value, unlike <code class="language-plaintext highlighter-rouge">forEach</code>).<code class="language-plaintext highlighter-rouge">currentNumber</code> refers to the item in the array that is currently being examined. The <code class="language-plaintext highlighter-rouge">0</code> that is passed in as the second argument to <code class="language-plaintext highlighter-rouge">reduce</code> refers to the value <code class="language-plaintext highlighter-rouge">accumulator</code> should assume the first time the callback is run.</p>
+<blockquote>
+  <p><em>Add a groupBy method to Array.prototype</em> so that elements in an array could be grouped by the result of evaluating a function on each element.</p>
+</blockquote>
 
-<p>Taking this step-by-step, the first time <code class="language-plaintext highlighter-rouge">reduce</code> runs, <code class="language-plaintext highlighter-rouge">accumulator</code> is set to <code class="language-plaintext highlighter-rouge">0</code> and <code class="language-plaintext highlighter-rouge">currentNumber</code> is set to <code class="language-plaintext highlighter-rouge">1</code>. The callback returns the sum of these two numbers, which becomes the <code class="language-plaintext highlighter-rouge">accumulator</code> for the second iteration when <code class="language-plaintext highlighter-rouge">2</code> will be assigned to <code class="language-plaintext highlighter-rouge">currentNumber</code>. In that case, the callback will return <code class="language-plaintext highlighter-rouge">3</code>, which becomes the <code class="language-plaintext highlighter-rouge">accumulator</code> for the next cycle, and so on. In this way, all the numbers are added together resulting in <code class="language-plaintext highlighter-rouge">15</code> (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce">MDN article</a> on <code class="language-plaintext highlighter-rouge">reduce</code> to learn more).</p>
+<p>Unlike most algorithm challenges, the function we’re being asked to create here is intended to be a method on <code class="language-plaintext highlighter-rouge">Array's</code> prototype. Rather than writing a function that takes a targeted array as it’s first argument (and presumably the sorting function as its second), here we want to create something that can be called from individual arrays.</p>
 
-<p><code class="language-plaintext highlighter-rouge">reduce</code> is a handy function. Its syntax is a little tricky to get a handle of, but once you have it all figured out you’ll find it to be useful way of applying a compounding function on all the elements of an array, ultimately ‘reducing’ it to some final result.</p>
+<p>So how do we go about doing that? Let’s think for a few minutes about some of the other methods that we call from arrays, like <code class="language-plaintext highlighter-rouge">push</code> or <code class="language-plaintext highlighter-rouge">slice</code>. Have you ever wondered why it is that you call these types of functions directly from an array? The reason is because they exist on <code class="language-plaintext highlighter-rouge">Array's</code> prototype. What does that mean?</p>
 
-<p>In our case, we can substitute initializing <code class="language-plaintext highlighter-rouge">out</code> to an empty array by assigning it directly to a reducing function that builds an array of unique elements found in the arguments:</p>
+<p>All arrays are instances of the <code class="language-plaintext highlighter-rouge">Array</code> object, a global object that is used to construct arrays. This fact is sometimes forgotten because the preferred way of constructing arrays is to use the array literal syntax:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
 
-  <span class="kd">var</span> <span class="nx">out</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
-    <span class="p">});</span>
-  <span class="p">},</span> <span class="p">[]);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">//  ['Derrida', 'Lacan', 'Barthes']</span></code></pre></figure>
 
-  <span class="k">return</span> <span class="nx">out</span><span class="p">;</span>
+<p>But remember that just like objects you can use the <code class="language-plaintext highlighter-rouge">new</code> keyword to build arrays as well:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">//  ['Derrida', 'Lacan', 'Barthes']</span></code></pre></figure>
+
+<p>The fact that arrays are objects is why if you want to test for whether or not something is an array you have to use the <code class="language-plaintext highlighter-rouge">Array.isArray</code> method instead of <code class="language-plaintext highlighter-rouge">typeof</code>:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">frenchies</span><span class="p">)</span> <span class="c1">// 'object'</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">))</span> <span class="c1">// true</span></code></pre></figure>
+
+<p>This isn’t a bug in JavaScript. Point <code class="language-plaintext highlighter-rouge">typeof</code> at an array and it will faithfully tell you that it’s an object because that’s what it is. The fact that we like to construct arrays by way of the array literal syntax instead of the <code class="language-plaintext highlighter-rouge">new</code> keyword doesn’t change the fact that all arrays are just instances of the <code class="language-plaintext highlighter-rouge">Array</code> global object.</p>
+
+<p>Knowing that arrays are instances of the <code class="language-plaintext highlighter-rouge">Array</code> object informs us that there also exists an <code class="language-plaintext highlighter-rouge">Array.prototype</code>, an object from which all <code class="language-plaintext highlighter-rouge">Array</code> instances inherit certain properties and methods. <code class="language-plaintext highlighter-rouge">push</code> and <code class="language-plaintext highlighter-rouge">slice</code> are in fact methods on <code class="language-plaintext highlighter-rouge">Array.prototype</code>, and when you call them from a specific instance of <code class="language-plaintext highlighter-rouge">Array</code>, all your doing is invoking those methods in such a way that within their execution the value of <code class="language-plaintext highlighter-rouge">this</code> refers to the specific array from which they are being invoked.</p>
+
+<p>There’s nothing special about <code class="language-plaintext highlighter-rouge">Array.prototype</code>. It’s just an object with a bunch of methods that help out with traversing and mutating instances of <code class="language-plaintext highlighter-rouge">Array</code>. Beause it’s a prototype object, everything stored within <code class="language-plaintext highlighter-rouge">Array.prototype</code> is accessible by all of the instances of <code class="language-plaintext highlighter-rouge">Array</code> (that’s what it means when we say that <code class="language-plaintext highlighter-rouge">Array</code> inherits the methods and properties of <code class="language-plaintext highlighter-rouge">Array.prototype</code>). This fact can come in handy if we want to write a method that can be called from any array. All we need to do is simply add the method to <code class="language-plaintext highlighter-rouge">Array.prototype</code> just like we would do with any other object.</p>
+
+<p>Let’s do that now with our <code class="language-plaintext highlighter-rouge">groupBy</code> method:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
+
+<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// We'll write out the logic required by the challenge later.</span>
+  <span class="c1">// For now, let's just log this to the console.</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">brits</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Hall</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Williams</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Eagleton</span><span class="dl">'</span><span class="p">];</span>
+
+<span class="nx">frenchies</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">();</span> <span class="c1">// ["Derrida", "Lacan", "Barthes"]</span>
+<span class="nx">brits</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">();</span>     <span class="c1">// ["Hall", "Williams", "Eagleton"]</span></code></pre></figure>
+
+<p>As you can see, <code class="language-plaintext highlighter-rouge">groupBy</code> can now be called from any array in our code, including the ones that were instantiated before we modified <code class="language-plaintext highlighter-rouge">Array.prototype</code>. Neat!</p>
+
+<p><em>*** A quick word of caution before proceeding: it’s typically frowned upon to modify any of the built-in prototypes in JavaScript, including <code class="language-plaintext highlighter-rouge">Array.prototype</code>, unless you have a really good reason. See <a href="http://stackoverflow.com/questions/8859828/javascript-what-dangers-are-in-extending-array-prototype">this StackOverflow post</a> for a good discussion on the issue. ***</em></p>
+
+<p>##Using reduce to solve the challenge</p>
+
+<p>Now that we know how to extend the array prototype, lets go ahead and implement the groupBy function.</p>
+
+<p>The challenge asks us to write groupBy so that when it’s called from an array, it will iterate through the array and apply a function (passed in as an argument to groupBy) to each element. It will return a object that has as properties the result of applying the passed in function to all of the elements, the values for which will be an array containing all of the original items that resulted in that value. And of course if no function is passed in, then the function groupBy uses should just simply return the value being considered.</p>
+
+<p>We’ll cover that last bit later. For now, lets talk about how we cover the core functionality being asked.</p>
+
+<p>Put broadly, the challenge is asking for a method that returns a single thing (in this case an object) that is the result of looping through an array and applying some code (the function passed to groupBy). This is a perfect use case for <code class="language-plaintext highlighter-rouge">reduce</code>, which I discussed in detail in the last post (go read that if you’re unfamiliar).</p>
+
+<p>Since we know that we’re going to be using <code class="language-plaintext highlighter-rouge">reduce</code>, lets a get basic skeleton of our groupBy function written with some psuedo code for what we’re going to have <code class="language-plaintext highlighter-rouge">reduce</code> do:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//We call reduce on this because in this case the keyword this will refer to the array from which groupBy is being called.</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//apply fn to the item being considered and save the result. We'll call it prop.</span>
+
+      <span class="c1">//Check to see if the accum object already has prop as a property. If it does, add item to the corresponding array. If it doesn't, add prop as a property with an array containing nothing but item.</span>
+
+      <span class="c1">//return the updated copy so that it becomes the new accum on the next iteration.</span>
+    <span class="p">},</span> <span class="p">{})</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>First, we have to apply the function that’s being passed to groupBy to each item in the array. Because the returned result will become the property on the object being created by <code class="language-plaintext highlighter-rouge">reduce</code>, we’ll save it in a variable called prop:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span></code></pre></figure>
+
+<p>Next, we’ll check to see if the accum object has prop as a property on it. We’ll do that using by <code class="language-plaintext highlighter-rouge">hasOwnProperty</code>, like this:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+  <span class="c1">//Add item to the array that is the value for that property</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="c1">//Add the property to accum and set the value to array containing item</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>In fact, since the callback we are handing to <code class="language-plaintext highlighter-rouge">reduce</code> returns an array, we can dispense with assigning the result to <code class="language-plaintext highlighter-rouge">out</code> and just return it directly:</p>
+<p>If the property already exists, we’ll simply add the item onto the already existing array. We can do that like this:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
-  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
-    <span class="p">});</span>
-  <span class="p">},</span> <span class="p">[]);</span>
-<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="c1">//Add the property to accum and set the value to array containing item</span>
 <span class="p">}</span></code></pre></figure>
 
-<h3 id="wrapping-up">Wrapping up</h3>
+<p>If it doesn’t exist, we’ll simply add it and set the value to an array containing just the item that we initially passed to fn. Here’s how to do that:</p>
 
-<p>Before closing, there are three additional points I want to make regarding <code class="language-plaintext highlighter-rouge">uniteUnique</code>. When it comes to completing algorithm challenges like this, you’ll find that there are many different ways to achieve the desired outcome. Sometimes you’ll encounter overly complicated solutions with lots of nested for loops and counters. Other times you’ll read one-liners that make use of method chaining and regex tests. As a rule of thumb, I recommend striving for a solution that balances clarity with performance. You certainly want to avoid writing functions replete with taxing operations, but I also think it’s important to avoid single-line solutions that are especially cryptic.</p>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
-<p>On that note, here are three additional ways of rewriting the above solution.</p>
-
-<p>First, you might have wondered we used <code class="language-plaintext highlighter-rouge">call</code> to access the <code class="language-plaintext highlighter-rouge">slice</code> method for <code class="language-plaintext highlighter-rouge">arguments</code> when we could have done the same thing for <code class="language-plaintext highlighter-rouge">reduce</code> (or <code class="language-plaintext highlighter-rouge">forEach</code>). In that case, there would be no need to create an <code class="language-plaintext highlighter-rouge">args</code> variable at the top of our function.</p>
-
-<p>Indeed, using <code class="language-plaintext highlighter-rouge">call</code> directly with <code class="language-plaintext highlighter-rouge">reduce</code> (or <code class="language-plaintext highlighter-rouge">forEach</code>) and <code class="language-plaintext highlighter-rouge">arguments</code> will work just fine. It would look something like this:</p>
-
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">reduce</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">currentArg</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">element</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">accumulator</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">;</span>
-  <span class="p">},</span> <span class="p">[]);</span>
-<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>This is a little too messy for my tastes. I begin to worry that my code is becoming unreadable once its shape starts resembling a sideways pyramid. This solution manages to bypass crafting an actual array from the array-like <code class="language-plaintext highlighter-rouge">arguments</code> object, but I don’t think trading in that small operation for this hard-to-read cascade of indented code is worth it.</p>
+<p>Last but not least, we’ll return our modified <code class="language-plaintext highlighter-rouge">accum</code> object so that it get’s considered during the next iteration of the reduce loop. Altogether it should look like this:</p>
 
-<p><code class="language-plaintext highlighter-rouge">reduce</code> is definitely the way to go when it comes to managing our outer loop, but <code class="language-plaintext highlighter-rouge">forEach</code> is not our only option when it comes to the inner one. The <a href="https://www.freecodecamp.com/challenges/sorted-union#?solution=function%20uniteUnique(arr)%20%7B%0A%20%20var%20args%20%3D%20Array.prototype.slice.call(arguments)%3B%0A%20%20return%20args.reduce(function(accum%2C%20curr)%20%7B%0A%20%20%20%20return%20accum.concat(curr.filter(function(item)%20%7B%0A%20%20%20%20%20%20return%20accum.indexOf(item)%20%3C%200%3B%20%20%0A%20%20%20%20%7D))%3B%0A%20%20%7D%2C%20%5B%5D)%3B%0A%7D%0A%0AuniteUnique(%5B1%2C%203%2C%202%5D%2C%20%5B5%2C%202%2C%201%2C%204%5D%2C%20%5B2%2C%201%5D)%3B%0A">solution I submitted to Free Code Camp</a> involves using the <code class="language-plaintext highlighter-rouge">filter</code> method on the <code class="language-plaintext highlighter-rouge">currentArg</code> array to get an array of unique elements, the contents of which are then added the <code class="language-plaintext highlighter-rouge">accumulator</code> array by way of <code class="language-plaintext highlighter-rouge">concat</code>. It looks like this (we don’t actually need the empty array that makes up the second argument to<code class="language-plaintext highlighter-rouge">reduce</code>, by the way; it’s perfectly fine that the initial array in <code class="language-plaintext highlighter-rouge">args</code> be our first <code class="language-plaintext highlighter-rouge">accumulator</code>, which is what will happen if we leave it absent like below):</p>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
+    <span class="p">}</span>
 
-  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">currentArg</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>  
-    <span class="p">}));</span>
-  <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">accum</span><span class="p">;</span>
+  <span class="p">},</span> <span class="p">{})</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Those nested return statements (and the <code class="language-plaintext highlighter-rouge">concat</code> and <code class="language-plaintext highlighter-rouge">filter</code> combo) are a little strange looking, but fortunately ES6 syntax helps make things look a little better:</p>
+<p>Okay, so what about that condition that says if no function is passed into groupBy to just return the item? Well, that’s pretty easy. Before we get to the reduce bit, we’ll just make sure that we have a default function for <code class="language-plaintext highlighter-rouge">fn</code> in cases when it’s groupBy is called with non-function arguments:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">uniteUnique</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">function</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">fn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="nx">item</span><span class="p">;</span>
+     <span class="p">};</span>
+   <span class="p">}</span>
 
-  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">accumulator</span><span class="p">,</span> <span class="nx">currentArg</span><span class="p">)</span> <span class="o">=&gt;</span>
-    <span class="p">[...</span><span class="nx">accumulator</span><span class="p">,</span>
-    <span class="p">...</span><span class="nx">currentArg</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">accumulator</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)]);</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">accum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">accum</span><span class="p">;</span>
+  <span class="p">},</span> <span class="p">{})</span>
 <span class="p">}</span></code></pre></figure>
 
+<p>And that’s it!</p>
+
+<h2 id="refactoring-for-es6">Refactoring for ES6</h2>
+
+<p>So how can we rewrite this code to use ES6 features?</p>
+
+<p>Well, first of all we can use arrow functions to to rewrite the default function for <code class="language-plaintext highlighter-rouge">fn</code>:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">function</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">fn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">item</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This doesn’t take advantage of the revised way that arrow functions handle the <code class="language-plaintext highlighter-rouge">this</code> keyword, but the new syntax cleans up some of those nested curly braces quite nicely.</p>
+
+<p>We can also use <code class="language-plaintext highlighter-rouge">Object.assign</code> and the spread operator to change up the way we handle the <code class="language-plaintext highlighter-rouge">accum</code> object in our reduce function:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="nx">x</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">)</span> <span class="p">?</span> <span class="p">[...</span><span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="nx">item</span><span class="p">]:</span> <span class="p">[</span><span class="nx">item</span><span class="p">]</span>
+  <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span>
+
+<span class="p">},</span> <span class="p">{});</span></code></pre></figure>
+
+<p>First we create an empty object, <code class="language-plaintext highlighter-rouge">x</code>. Next, we employ a ternary (as opposed to the <code class="language-plaintext highlighter-rouge">if...else</code> syntax from above) to handle setting <code class="language-plaintext highlighter-rouge">x[prop]</code>. And rather than using <code class="language-plaintext highlighter-rouge">push</code>, we’re now using the spread operator to create add the item to <code class="language-plaintext highlighter-rouge">accum[prop]</code>. Finally, we use <code class="language-plaintext highlighter-rouge">Object.assign</code> to gracefully merge <code class="language-plaintext highlighter-rouge">x</code> with <code class="language-plaintext highlighter-rouge">accum</code>.</p>
 
   </article>
   
@@ -357,7 +314,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2019-12-12T14:58:31-08:00">2019</time>. All rights reserved.
+          &copy; <time datetime="2019-12-13T11:17:03-08:00">2019</time>. All rights reserved.
         </small>
       </footer>
     </div>

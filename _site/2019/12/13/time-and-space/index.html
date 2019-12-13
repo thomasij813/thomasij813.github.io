@@ -10,7 +10,7 @@
 
   <title>
     
-      Thomas Johnson
+      Algorithm Scripting -- Considering Time Complexity &middot; Thomas Johnson
     
   </title>
 
@@ -65,18 +65,10 @@
       </header>
 
       <main>
-        <div class="posts">
-  
-  <article class="post">
-    <h1 class="post-title">
-      <a href="/2019/12/13/time-and-space/">
-        Algorithm Scripting -- Considering Time Complexity
-      </a>
-    </h1>
-
-    <time datetime="2019-12-13T00:00:00-08:00" class="post-date">13 Dec 2019</time>
-
-    <p>One question that software engineers grapple with when writing an algorithm is How long does it take to complete? The answer to this question is what’s referred to as a piece of code’s <strong>time complexity</strong>, and determining it is more than just running the code a few times and finding the averag execution time. Instead, time complexity means figuring out how many operations are done by a piece of software <strong>relative</strong> to the size of a given input.</p>
+        <article class="post">
+  <h1 class="post-title">Algorithm Scripting -- Considering Time Complexity</h1>
+  <time datetime="2019-12-13T00:00:00-08:00" class="post-date">13 Dec 2019</time>
+  <p>One question that software engineers grapple with when writing an algorithm is How long does it take to complete? The answer to this question is what’s referred to as a piece of code’s <strong>time complexity</strong>, and determining it is more than just running the code a few times and finding the averag execution time. Instead, time complexity means figuring out how many operations are done by a piece of software <strong>relative</strong> to the size of a given input.</p>
 
 <p>That phrase “relative to the size of a given input” is important. Consider a function that takes an array as input. Does the number of operations that function perform stay the same, no matter how big the array is? If so, congratulations, it’s time complexity is <strong>constant time</strong>, which is notated at <strong>O(1)</strong>.</p>
 
@@ -154,18 +146,43 @@
 
 <p>To summarize, our gut reaction was to over-rely upon the <strong>nums</strong> array, using it to iterate through the numbers and lookup the location of their compliments. But because looking up the location of values in an array is itself done in linear time, that approach would have resulted in a time complexity of <strong>O(n²)</strong>. By using an object to store and lookup the location of the complimenting values, however, we were able to cut out that second loop, resulting in the desired time complexity of O(n).</p>
 
-  </article>
-  
-</div>
+</article>
 
-<div class="pagination">
-  
-    <a class="pagination-item older" href="/page2">Previous Post</a>
-  
-  
-    <span class="pagination-item newer">Next Post</span>
-  
-</div>
+
+<aside class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/06/25/group-by/">
+            Algorithm Scripting -- Group By
+            <small><time datetime="2016-06-25T00:00:00-07:00">25 Jun 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/06/19/sorted-union/">
+            Algorithm Scripting -- Sorted Union
+            <small><time datetime="2016-06-19T00:00:00-07:00">19 Jun 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/06/16/its-been-a-while/">
+            It's probably time for an update...
+            <small><time datetime="2016-06-16T00:00:00-07:00">16 Jun 2016</time></small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</aside>
+
 
       </main>
 
