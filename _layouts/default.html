@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
   {% include head.html %}
 
   <body>
-
     <div class="container content">
       <header class="masthead">
         <h3 class="masthead-title">
           <a href="{{ site.baseurl }}/" title="Home">{{ site.title }}</a>
         </h3>
         <ul>
-          {% for link in site.navbar_list %}
-            {% if page.title == link[0] %}
-              <li><a class="small blue" href="{{ link[1] }}">{{ link[0] }}</a></li>
-            {% else %}
-              <li><a class="small" href="{{ link[1] }}">{{ link[0] }}</a></li>
-            {% endif %}
-          {% endfor %}
+          {% for link in site.navbar_list %} {% if page.title == link[0] %}
+          <li><a class="small blue" href="{{ link[1] }}">{{ link[0] }}</a></li>
+          {% else %}
+          <li><a class="small" href="{{ link[1] }}">{{ link[0] }}</a></li>
+          {% endif %} {% endfor %}
         </ul>
         <div class="below-header">
           <div class="hr"></div>
-          <img src="https://farm6.staticflickr.com/5831/20836963561_b5d4186595_o_d.jpg" alt="" class="zebra_image">
+          <img
+            src="https://dl.dropboxusercontent.com/s/prjzi4ax697sfhv/TFZDXMJ1K-UMEJ58UUT-8cf251016519-512.png"
+            alt=""
+            class="zebra_image"
+          />
           <div class="hr"></div>
         </div>
       </header>
@@ -32,7 +32,10 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="{{ site.time | date_to_xmlschema }}">{{ site.time | date: '%Y' }}</time>. All rights reserved.
+          &copy;
+          <time datetime="{{ site.time | date_to_xmlschema }}"
+            >{{ site.time | date: '%Y' }}</time
+          >. All rights reserved.
         </small>
       </footer>
     </div>
