@@ -9,7 +9,7 @@
 
   <title>
     
-      Algorithm Scripting -- Considering Time Complexity with Two Sum &middot; Thomas Johnson
+      Considering Time Complexity with Two Sum &middot; Thomas Johnson
     
   </title>
 
@@ -60,7 +60,7 @@
 
       <main>
         <article class="post">
-  <h1 class="post-title">Algorithm Scripting -- Considering Time Complexity with Two Sum</h1>
+  <h1 class="post-title">Considering Time Complexity with Two Sum</h1>
   <time datetime="2019-12-13T00:00:00-08:00" class="post-date">13 Dec 2019</time>
   <p>Before attending Hack Reactor, I knew very little about how to think or talk about a piece of code’s performance. Of course, as a self-taught developer, I did have a couple general intuitions that I had picked up. I knew, for example, that more lines of code generally indicated more operations that had to be performed, and that that in turn meant longer execution time. Rely heavily on for loops or <code class="language-plaintext highlighter-rouge">forEach</code> calls, and that sequence of operations can get out of hand. Makes sense, right?</p>
 
@@ -70,7 +70,7 @@
 
 <p>Remember when I said earlier that Big O Notation is about considering an algorithm’s complexity relative to the size of the input? That phrase “relative to the size of the input” is important. Consider a function that takes an array as one of its parameters. Does the number of operations that that function performs stay the same, no matter how big the array is? If so, congratulations, it has a time complexity of constant time, notated as <em>O(1)</em>.</p>
 
-<p>Working with arrays, however, usually requires iterating over some or all of the contained elements in some kind of loop, so it’s likely that the total number of operations will increase as the size of the array grows. If the rate of growth for this increase stays the same (ie, you have one loop or multiple that are back to back), that’s referred to as linear time or <em>O(n)</em>. If the rate of growth exceeds that (ie, you have several loops nested inside one another), then you’re venturing into the realm of quadratic time (<em>O(n²)</em>) or, God help you, exponential time (<em>(O(2^n)</em>).</p>
+<p>Working with arrays, however, usually requires iterating over some or all of the contained elements in some kind of loop, so it’s likely that the total number of operations will increase as the size of the array grows. If the rate of growth for this increase stays the same (ie, you have one loop or multiple that are back to back), that’s referred to as linear time or <em>O(n)</em>. If the rate of growth exceeds that (ie, you have several loops nested inside one another), then you’re venturing into the realm of quadratic time (<em>O(n²)</em>) or, God help you, exponential time (<em>O(2^n)</em>).</p>
 
 <p>In most circumstances, you want to keep your functions to constant time or linear time. Code that has a time complexity of anything greater than that will likely not perform adequately in real-world situations. Your function consisting of several nested for loops and sorting operations might work just fine when you’re testing it with an input array of only several elements. But that same function probably won’t cut it in a non-contrived scenario when the array length is likely to be much higher.</p>
 
@@ -191,7 +191,7 @@
       <footer class="footer">
         <small>
           &copy;
-          <time datetime="2019-12-13T17:02:56-08:00"
+          <time datetime="2019-12-13T17:09:09-08:00"
             >2019</time
           >. All rights reserved.
         </small>

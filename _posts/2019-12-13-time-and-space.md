@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Algorithm Scripting -- Considering Time Complexity with Two Sum
+title: Considering Time Complexity with Two Sum
 date: 2019-12-13
 ---
 
@@ -12,7 +12,7 @@ For the rest of this post, I'm going to give an example of how to think about a 
 
 Remember when I said earlier that Big O Notation is about considering an algorithm's complexity relative to the size of the input? That phrase "relative to the size of the input" is important. Consider a function that takes an array as one of its parameters. Does the number of operations that that function performs stay the same, no matter how big the array is? If so, congratulations, it has a time complexity of constant time, notated as _O(1)_.
 
-Working with arrays, however, usually requires iterating over some or all of the contained elements in some kind of loop, so it's likely that the total number of operations will increase as the size of the array grows. If the rate of growth for this increase stays the same (ie, you have one loop or multiple that are back to back), that's referred to as linear time or _O(n)_. If the rate of growth exceeds that (ie, you have several loops nested inside one another), then you're venturing into the realm of quadratic time (_O(n&sup2;)_) or, God help you, exponential time (_(O(2^n)_).
+Working with arrays, however, usually requires iterating over some or all of the contained elements in some kind of loop, so it's likely that the total number of operations will increase as the size of the array grows. If the rate of growth for this increase stays the same (ie, you have one loop or multiple that are back to back), that's referred to as linear time or _O(n)_. If the rate of growth exceeds that (ie, you have several loops nested inside one another), then you're venturing into the realm of quadratic time (_O(n&sup2;)_) or, God help you, exponential time (_O(2^n)_).
 
 In most circumstances, you want to keep your functions to constant time or linear time. Code that has a time complexity of anything greater than that will likely not perform adequately in real-world situations. Your function consisting of several nested for loops and sorting operations might work just fine when you're testing it with an input array of only several elements. But that same function probably won't cut it in a non-contrived scenario when the array length is likely to be much higher.
 
