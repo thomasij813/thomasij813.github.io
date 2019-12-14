@@ -92,11 +92,9 @@
 
 <p>These examples are provided to illustrate the concept:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// I'm using the expect testing library to frame these assertions.</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// I'm using the expect testing library to frame these assertions.</span>
 
-<span class="nx">expect</span><span class="p">(</span>
-  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">()</span>
-<span class="p">).</span><span class="nx">toEqual</span><span class="p">({</span>
+<span class="nx">expect</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">()).</span><span class="nx">toEqual</span><span class="p">({</span>
   <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
   <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
   <span class="mi">3</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span>
@@ -106,16 +104,19 @@
 <span class="p">});</span>
 
 <span class="nx">expect</span><span class="p">(</span>
-  <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">val</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;}</span> <span class="p">)</span>
+  <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">].</span><span class="nx">groupBy</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">val</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="p">})</span>
 <span class="p">).</span><span class="nx">toEqual</span><span class="p">({</span>
   <span class="mi">0</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
   <span class="mi">1</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
   <span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-<span class="p">})</span></code></pre></figure>
+<span class="p">});</span>
+</code></pre></div></div>
 
 <p>The description and the examples are pretty clear, so I don’t think there’s any reason to provide a detailed gloss on what is being asked for here. To put it briefly, the idea is to extend <code class="language-plaintext highlighter-rouge">Array.prototype</code> with a method that categorizes an array’s elements according to the value that gets generated when they are passed to a given function. The method should return an object, the structure of which is illustrated by the example cases.</p>
 
-<p>The reason I like this challenge is because it gives me a good opportunity to talk about three features of ES6 that I find myself time and again: arrow functions, Object.assign, and the spread operator.</p>
+<p>The reason I like this challenge is because it gives me a good opportunity to talk about three features of ES6 that I find myself time and again: default parameters, arrow functions, and the spread operator.</p>
 
 <h3 id="arrayprototype">Array.prototype</h3>
 
@@ -131,22 +132,25 @@
 
 <p>All arrays are instances of the <code class="language-plaintext highlighter-rouge">Array</code> object, a global object that is used to construct arrays. This fact is sometimes forgotten because the preferred way of constructing arrays is to use the array literal syntax:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Derrida</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Lacan</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Barthes</span><span class="dl">"</span><span class="p">];</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">//  ['Derrida', 'Lacan', 'Barthes']</span></code></pre></figure>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">// ['Derrida', 'Lacan', 'Barthes']</span>
+</code></pre></div></div>
 
 <p>But remember that just like objects you can use the <code class="language-plaintext highlighter-rouge">new</code> keyword to build arrays as well:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="dl">"</span><span class="s2">Derrida</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Lacan</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Barthes</span><span class="dl">"</span><span class="p">);</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">//  ['Derrida', 'Lacan', 'Barthes']</span></code></pre></figure>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">);</span> <span class="c1">// ['Derrida', 'Lacan', 'Barthes']</span>
+</code></pre></div></div>
 
 <p>The fact that arrays are objects is why if you want to test for whether or not something is an array you have to use the <code class="language-plaintext highlighter-rouge">Array.isArray</code> method instead of <code class="language-plaintext highlighter-rouge">typeof</code>:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Derrida</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Lacan</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Barthes</span><span class="dl">"</span><span class="p">];</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">frenchies</span><span class="p">)</span> <span class="c1">// 'object'</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">))</span> <span class="c1">// true</span></code></pre></figure>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">frenchies</span><span class="p">);</span> <span class="c1">// 'object'</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">frenchies</span><span class="p">));</span> <span class="c1">// true</span>
+</code></pre></div></div>
 
 <p>This isn’t a bug in JavaScript. Point <code class="language-plaintext highlighter-rouge">typeof</code> at an array and it will faithfully tell you that it’s an object because that’s what it is. The fact that we like to construct arrays by way of the array literal syntax instead of the <code class="language-plaintext highlighter-rouge">new</code> keyword doesn’t change the fact that all arrays are just instances of the <code class="language-plaintext highlighter-rouge">Array</code> global object.</p>
 
@@ -156,7 +160,7 @@
 
 <p>Let’s do that now with our <code class="language-plaintext highlighter-rouge">groupBy</code> method:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Derrida</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Lacan</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Barthes</span><span class="dl">'</span><span class="p">];</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">frenchies</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Derrida</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Lacan</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Barthes</span><span class="dl">"</span><span class="p">];</span>
 
 <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// We'll write out the logic required by the challenge later.</span>
@@ -164,16 +168,17 @@
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 <span class="p">};</span>
 
-<span class="kd">var</span> <span class="nx">brits</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">Hall</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Williams</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Eagleton</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">brits</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Hall</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Williams</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Eagleton</span><span class="dl">"</span><span class="p">];</span>
 
 <span class="nx">frenchies</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">();</span> <span class="c1">// ["Derrida", "Lacan", "Barthes"]</span>
-<span class="nx">brits</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">();</span>     <span class="c1">// ["Hall", "Williams", "Eagleton"]</span></code></pre></figure>
+<span class="nx">brits</span><span class="p">.</span><span class="nx">groupBy</span><span class="p">();</span> <span class="c1">// ["Hall", "Williams", "Eagleton"]</span>
+</code></pre></div></div>
 
 <p>As you can see, <code class="language-plaintext highlighter-rouge">groupBy</code> can now be called from any array in our code, including the ones that were instantiated before we modified <code class="language-plaintext highlighter-rouge">Array.prototype</code>. Neat!</p>
 
 <p><em>*** A quick word of caution before proceeding: it’s typically frowned upon to modify any of the built-in prototypes in JavaScript, including <code class="language-plaintext highlighter-rouge">Array.prototype</code>, unless you have a really good reason. See <a href="http://stackoverflow.com/questions/8859828/javascript-what-dangers-are-in-extending-array-prototype">this StackOverflow post</a> for a good discussion on the issue. ***</em></p>
 
-<p>##Using reduce to solve the challenge</p>
+<h2 id="using-reduce-to-solve-the-challenge">Using reduce to solve the challenge</h2>
 
 <p>Now that we know how to extend the array prototype, lets go ahead and implement the groupBy function.</p>
 
@@ -185,56 +190,59 @@
 
 <p>Since we know that we’re going to be using <code class="language-plaintext highlighter-rouge">reduce</code>, lets a get basic skeleton of our groupBy function written with some psuedo code for what we’re going to have <code class="language-plaintext highlighter-rouge">reduce</code> do:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">//We call reduce on this because in this case the keyword this will refer to the array from which groupBy is being called.</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-      <span class="c1">//apply fn to the item being considered and save the result. We'll call it prop.</span>
-
-      <span class="c1">//Check to see if the accum object already has prop as a property. If it does, add item to the corresponding array. If it doesn't, add prop as a property with an array containing nothing but item.</span>
-
-      <span class="c1">//return the updated copy so that it becomes the new accum on the next iteration.</span>
-    <span class="p">},</span> <span class="p">{})</span>
-<span class="p">};</span></code></pre></figure>
+    <span class="c1">//apply fn to the item being considered and save the result. We'll call it prop.</span>
+    <span class="c1">//Check to see if the accum object already has prop as a property. If it does, add item to the corresponding array. If it doesn't, add prop as a property with an array containing nothing but item.</span>
+    <span class="c1">//return the updated copy so that it becomes the new accum on the next iteration.</span>
+  <span class="p">},</span> <span class="p">{});</span>
+<span class="p">};</span>
+</code></pre></div></div>
 
 <p>First, we have to apply the function that’s being passed to groupBy to each item in the array. Because the returned result will become the property on the object being created by <code class="language-plaintext highlighter-rouge">reduce</code>, we’ll save it in a variable called prop:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span></code></pre></figure>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>Next, we’ll check to see if the accum object has prop as a property on it. We’ll do that using by <code class="language-plaintext highlighter-rouge">hasOwnProperty</code>, like this:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
   <span class="c1">//Add item to the array that is the value for that property</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
   <span class="c1">//Add the property to accum and set the value to array containing item</span>
-<span class="p">}</span></code></pre></figure>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>If the property already exists, we’ll simply add the item onto the already existing array. We can do that like this:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
   <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
   <span class="c1">//Add the property to accum and set the value to array containing item</span>
-<span class="p">}</span></code></pre></figure>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>If it doesn’t exist, we’ll simply add it and set the value to an array containing just the item that we initially passed to fn. Here’s how to do that:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
   <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
   <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
-<span class="p">}</span></code></pre></figure>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>Last but not least, we’ll return our modified <code class="language-plaintext highlighter-rouge">accum</code> object so that it get’s considered during the next iteration of the reduce loop. Altogether it should look like this:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">))</span> <span class="p">{</span>
       <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
@@ -243,17 +251,19 @@
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="nx">accum</span><span class="p">;</span>
-  <span class="p">},</span> <span class="p">{})</span>
-<span class="p">}</span></code></pre></figure>
+
+<span class="p">},</span> <span class="p">{})</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>Okay, so what about that condition that says if no function is passed into groupBy to just return the item? Well, that’s pretty easy. Before we get to the reduce bit, we’ll just make sure that we have a default function for <code class="language-plaintext highlighter-rouge">fn</code> in cases when it’s groupBy is called with non-function arguments:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">function</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-     <span class="nx">fn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-       <span class="k">return</span> <span class="nx">item</span><span class="p">;</span>
-     <span class="p">};</span>
-   <span class="p">}</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">!==</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">item</span><span class="p">;</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
 
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
@@ -263,10 +273,11 @@
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
       <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
     <span class="p">}</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">accum</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">accum</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">accum</span><span class="p">;</span>
-  <span class="p">},</span> <span class="p">{})</span>
-<span class="p">}</span></code></pre></figure>
+  <span class="p">},</span> <span class="p">{});</span>
+<span class="p">};</span>
+</code></pre></div></div>
 
 <p>And that’s it!</p>
 
@@ -274,28 +285,25 @@
 
 <p>So how can we rewrite this code to use ES6 features?</p>
 
-<p>Well, first of all we can use arrow functions to to rewrite the default function for <code class="language-plaintext highlighter-rouge">fn</code>:</p>
+<p>Well, first of all we can use arrow functions and default parameters to rewrite the default function for <code class="language-plaintext highlighter-rouge">fn</code>:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">!==</span> <span class="dl">'</span><span class="s1">function</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-     <span class="nx">fn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">item</span><span class="p">;</span>
-   <span class="p">}</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>This doesn’t take advantage of the revised way that arrow functions handle the <code class="language-plaintext highlighter-rouge">this</code> keyword, but the new syntax cleans up some of those nested curly braces quite nicely.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span> <span class="o">=</span> <span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">};</span>
+</code></pre></div></div>
 
 <p>We can also use <code class="language-plaintext highlighter-rouge">Object.assign</code> and the spread operator to change up the way we handle the <code class="language-plaintext highlighter-rouge">accum</code> object in our reduce function:</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">groupBy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span> <span class="o">=</span> <span class="nx">item</span> <span class="o">=&gt;</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">)</span> <span class="p">?</span> <span class="p">[...</span><span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="nx">item</span><span class="p">]</span> <span class="p">:</span> <span class="p">[</span><span class="nx">item</span><span class="p">];</span>
+    <span class="k">return</span> <span class="nx">accum</span><span class="p">;</span>
+  <span class="p">},</span> <span class="p">{});</span>
+<span class="p">};</span>
+</code></pre></div></div>
 
-  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="nx">x</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">accum</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">prop</span><span class="p">)</span> <span class="p">?</span> <span class="p">[...</span><span class="nx">accum</span><span class="p">[</span><span class="nx">prop</span><span class="p">],</span> <span class="nx">item</span><span class="p">]:</span> <span class="p">[</span><span class="nx">item</span><span class="p">]</span>
-  <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">accum</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span>
-
-<span class="p">},</span> <span class="p">{});</span></code></pre></figure>
-
-<p>First we create an empty object, <code class="language-plaintext highlighter-rouge">x</code>. Next, we employ a ternary (as opposed to the <code class="language-plaintext highlighter-rouge">if...else</code> syntax from above) to handle setting <code class="language-plaintext highlighter-rouge">x[prop]</code>. And rather than using <code class="language-plaintext highlighter-rouge">push</code>, we’re now using the spread operator to create add the item to <code class="language-plaintext highlighter-rouge">accum[prop]</code>. Finally, we use <code class="language-plaintext highlighter-rouge">Object.assign</code> to gracefully merge <code class="language-plaintext highlighter-rouge">x</code> with <code class="language-plaintext highlighter-rouge">accum</code>.</p>
+<p>Here, we employ a ternary (as opposed to the <code class="language-plaintext highlighter-rouge">if...else</code> syntax from above) to handle updating <code class="language-plaintext highlighter-rouge">prop</code> in <code class="language-plaintext highlighter-rouge">accum</code>. And rather than using <code class="language-plaintext highlighter-rouge">push</code>, we’re now using the spread operator to add the item when <code class="language-plaintext highlighter-rouge">prop</code> exists.</p>
 
   </article>
   
@@ -314,7 +322,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2019-12-13T11:17:03-08:00">2019</time>. All rights reserved.
+          &copy; <time datetime="2019-12-13T16:50:10-08:00">2019</time>. All rights reserved.
         </small>
       </footer>
     </div>

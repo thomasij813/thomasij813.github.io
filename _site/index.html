@@ -70,25 +70,29 @@
   <article class="post">
     <h1 class="post-title">
       <a href="/2019/12/13/time-and-space/">
-        Algorithm Scripting -- Considering Time Complexity
+        Algorithm Scripting -- Considering Time Complexity with Two Sum
       </a>
     </h1>
 
     <time datetime="2019-12-13T00:00:00-08:00" class="post-date">13 Dec 2019</time>
 
-    <p>One question that software engineers grapple with when writing an algorithm is How long does it take to complete? The answer to this question is what’s referred to as a piece of code’s <strong>time complexity</strong>, and determining it is more than just running the code a few times and finding the averag execution time. Instead, time complexity means figuring out how many operations are done by a piece of software <strong>relative</strong> to the size of a given input.</p>
+    <p>Before attending Hack Reactor, I knew very little about how to think or talk about a piece of code’s performance. Of course, as a self-taught developer, I did have a couple general intuitions that I had picked up. I knew, for example, that more lines of code generally indicated more operations that had to be performed, and that that in turn meant longer execution time. Rely heavily on for loops or <code class="language-plaintext highlighter-rouge">forEach</code> calls, and that sequence of operations can get out of hand. Makes sense, right?</p>
 
-<p>That phrase “relative to the size of a given input” is important. Consider a function that takes an array as input. Does the number of operations that function perform stay the same, no matter how big the array is? If so, congratulations, it’s time complexity is <strong>constant time</strong>, which is notated at <strong>O(1)</strong>.</p>
+<p>Generally speaking, that’s true, but engineers value precision. And they don’t want to talk about something as important code performance with murky language based on intuition. Instead they use <strong>Big O Notation</strong>, a structured approach to evaluating algorithms and classifying them according to their complexity relative to the size of their input. When we are counting the total number of operations an algorithm performs, we are measuring its time complexity, and when we are looking at how much total memory it uses, we are evaluating its space complexity.</p>
 
-<p>Working with arrays, however, usually requireing iterating over some or all of the contained elements, so it’s likely that the number of operations will increase with the size of the array. If the rate of growth for this increase stays the same (ie, you have one for loop, or multiple that are back to back), that’s referred to as <strong>linear time</strong> or <strong>O(n)</strong>. If the rate of growth exceeds that (ie, you have nested for loops), then you’re venturing into the realm of <strong>quadratic time (O(n²)</strong> or, God help you, <strong>exponential time (O(2^n))</strong>.</p>
+<p>For the rest of this post, I’m going to give an example of how to think about a piece of code’s time complexity using Big O Notation. In the coming weeks, I’ll follow up with an additional post that explores space complexity.</p>
 
-<p>In most circumstances, you want to keep your functions to constant time or linear time. Code that has a time complexity of anything greater will likely not perform adequately in real-world situations. Your function consisting of several nested for loops and sorting operations might work just fine when the input array is only five elements long. But it probably won’t cut it in a non-contrived scenario when the array length is likely to be much higher.</p>
+<p>Remember when I said earlier that Big O Notation is about considering an algorithm’s complexity relative to the size of the input? That phrase “relative to the size of the input” is important. Consider a function that takes an array as one of its parameters. Does the number of operations that that function performs stay the same, no matter how big the array is? If so, congratulations, it has a time complexity of constant time, notated as <em>O(1)</em>.</p>
 
-<p>Constraining algorithms to linear time is rarely easy. When you’re new to writing software, for loops can feel like the bread and butter of programming, and limiting yourself to one at a time can present a real challenge. One way to get around this limitation is to learn techniques that rely on operations that execute in constant time.</p>
+<p>Working with arrays, however, usually requires iterating over some or all of the contained elements in some kind of loop, so it’s likely that the total number of operations will increase as the size of the array grows. If the rate of growth for this increase stays the same (ie, you have one loop or multiple that are back to back), that’s referred to as linear time or <em>O(n)</em>. If the rate of growth exceeds that (ie, you have several loops nested inside one another), then you’re venturing into the realm of quadratic time (<em>O(n²)</em>) or, God help you, exponential time (<em>(O(2^n)</em>).</p>
 
-<p>For example, consider this common coding challenge, a favorite, it seems, among technical recruiters. Given an array of integers and a targeted sum, write a function that returns the indices of the two numbers that when added together equal the specific target.</p>
+<p>In most circumstances, you want to keep your functions to constant time or linear time. Code that has a time complexity of anything greater than that will likely not perform adequately in real-world situations. Your function consisting of several nested for loops and sorting operations might work just fine when you’re testing it with an input array of only several elements. But that same function probably won’t cut it in a non-contrived scenario when the array length is likely to be much higher.</p>
 
-<p>A brute-force approach might look like the following:</p>
+<p>Unfortunately, constraining algorithms to linear time is rarely easy. When you’re new to writing software, looping through arrays can feel like the bread and butter of programming, and limiting yourself to one loop at a time can present a real challenge. A complicating factor is that many built in methods themslves rely on some kind iteration. Do you really want to use <code class="language-plaintext highlighter-rouge">indexOf</code> or <code class="language-plaintext highlighter-rouge">slice</code> on an array that you’re currently looping through? Both of those methods also entail looping through the array, so going down that path will result in quadratic time complexity. That’s why earning to correctly intuit which built in methods and techniques operate in constant time is the first step toward writing minimally complex code.</p>
+
+<p>For example, consider this common coding challenge, a favorite, it seems, among technical recruiters. Given an array of integers and a targeted sum, write a function that returns the indices of the two numbers that when added together equal the specified target.</p>
+
+<p>At first glance, we might come up with the following solution:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">twoSum</span> <span class="o">=</span> <span class="p">(</span><span class="nx">nums</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
@@ -104,11 +108,11 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<p>The natural intuition is to use a nested for loop, comparing each number as its encountered for the first time with all the other numbers in the array. But this requires a nested for loop, giving it a time complexity of <strong>O(n²)</strong>. Surely, we can do better.</p>
+<p>The natural intuition is to use a nested for loop, comparing each number as it’s encountered with all the other numbers in the array. This gives us a working solution, but that nested for loop gives it a time complexity of <em>O(n²)</em>. Surely, we can do better.</p>
 
-<p>The reason that we need that second for loop is because we are relying on the input array as storage mechanism for finding the compliment value. As we do our first loop we can figure out what that compliment value should be (it’s simply the target sum minus whatever the currently encounted number is), but so long as we’re using an array to store our numbers we will be forced to loop through it again to see if that compliment value exists.</p>
+<p>The reason that we need that second loop is because we are relying on the input array to find the compliment value. As we do our first loop we can figure out what that compliment value should be (it’s simply the target sum minus whatever the currently encounted number is), but so long as we’re using an array to look up values we will be forced to loop through it again to see if that compliment is present.</p>
 
-<p>Is there an alternative data structure that we can use instead, one that doesn’t rely on iteration to do lookups? Yes–objects! Finding a property in an object is done in constant time, so maybe we use that to our advantage.</p>
+<p>Is there an alternative data structure that we can use instead, one that doesn’t rely on iteration to do lookups? Yes–objects! Finding a property in an object is done in constant time, so maybe we can use that feature to our advantage.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">twoSum</span> <span class="o">=</span> <span class="p">(</span><span class="nx">nums</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">compliments</span> <span class="o">=</span> <span class="p">{};</span>
@@ -128,11 +132,15 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<p>This time we are doing two non-nested for loops. The first loop is used to establish a <code class="language-plaintext highlighter-rouge">compliments</code> object, which stores in key value pairs each number in <code class="language-plaintext highlighter-rouge">nums</code> and its index. Then we loop through <code class="language-plaintext highlighter-rouge">nums</code> again, this time checking to see if its compliment exists in <code class="language-plaintext highlighter-rouge">compliments</code>. Because finding a property in an object is in constant time, the lookup operation does not entail a second nested for loop meaning this function’s time complexity is linear.</p>
+<p>This time we are doing two non-nested for loops. The first loop is used to establish a <code class="language-plaintext highlighter-rouge">compliments</code> object, which stores in key-value pairs each number in <code class="language-plaintext highlighter-rouge">nums</code> and its index. Then we loop through <code class="language-plaintext highlighter-rouge">nums</code> again, checking to see if its compliment exists in <code class="language-plaintext highlighter-rouge">compliments</code>. Because finding a property in an object is in constant time, the lookup operation does not entail a nested loop, giving this version a time complexity of <em>O(n)</em>.</p>
 
-<p>Why is this version of the code linear? After all, there’s two for loops, just like in the earlier version. The reason is because the second loop is not nested inside the first one. In this case we are iterating over the input array twice, whereas in the first example we were iterating over it with each iteration. That’s the difference between <strong>O(2n)</strong> and <strong>O(n²)</strong>. And just because we’ve done that second loop resulting in the “2” in <strong>O(2n)</strong>, most engineers would observe that that that number is a constant value that won’t change as the input array grows and that it can be removed from the notation. Now we’re back to <strong>O(n)</strong>.</p>
+<p>But wait a second! There’s two loops there. Surely the time complexity can’t be linear when there’s more than one loop like that, right?</p>
 
-<p>But for code clarity, two loops is unnecessary. We can combine both operations–building <code class="language-plaintext highlighter-rouge">compliments</code> and/or using it–in one fell swoop.</p>
+<p>While there are multiple loops in this version, the reason that its time complexity is linear is because the second loop is not nested inside the first one. In this case we are iterating over the input array two times back-to-back, whereas in the first example we were iterating over it with each and every iteration. That’s the difference between <em>O(2n)</em> and <em>O(n²)</em>.</p>
+
+<p>How worried should we be about that second loop? From the standpoint of optimizing for time complexity, probably not too much. The second loop results in the “2” in <em>O(2n)</em>, but most engineers would observe that that that number is a constant value since it won’t change as the input array grows. And that means we can remove it from the notation, putting us back at <em>O(n)</em>.</p>
+
+<p>For code clarity, however, two loops is unnecessary. We can combine both operations–building <code class="language-plaintext highlighter-rouge">compliments</code> and making using of it–in one fell swoop.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">twoSum</span> <span class="o">=</span> <span class="p">(</span><span class="nx">nums</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">compliments</span> <span class="o">=</span> <span class="p">{};</span>
@@ -150,9 +158,9 @@
 <span class="p">};</span>
 </code></pre></div></div>
 
-<p>In this version we add numbers to <code class="language-plaintext highlighter-rouge">compliments</code> as they are encountered. When a compliment isn’t found, we add the number to the object in the offchance that it exists as the compliment for a number that’s located further along in the array.</p>
+<p>This time we add numbers to <code class="language-plaintext highlighter-rouge">compliments</code> as they are encountered. When a compliment isn’t found, we add the number to the object in the offchance that it will exist as the compliment for a number that’s located further along in the array.</p>
 
-<p>To summarize, our gut reaction was to over-rely upon the <strong>nums</strong> array, using it to iterate through the numbers and lookup the location of their compliments. But because looking up the location of values in an array is itself done in linear time, that approach would have resulted in a time complexity of <strong>O(n²)</strong>. By using an object to store and lookup the location of the complimenting values, however, we were able to cut out that second loop, resulting in the desired time complexity of O(n).</p>
+<p>To summarize, our gut reaction was to over-rely upon the <code class="language-plaintext highlighter-rouge">nums</code> array, using it to iterate through the numbers and look up the location of their compliments. But because looking up the location of values in an array is itself done in linear time, that approach would have resulted in a time complexity of <em>O(n²)</em>. By using an object to store and look up the location of the complimenting values, however, we were able to cut out that second loop entirely, resulting in the desired time complexity of <em>O(n)</em>.</p>
 
   </article>
   
@@ -171,7 +179,7 @@
 
       <footer class="footer">
         <small>
-          &copy; <time datetime="2019-12-13T11:17:03-08:00">2019</time>. All rights reserved.
+          &copy; <time datetime="2019-12-13T16:50:10-08:00">2019</time>. All rights reserved.
         </small>
       </footer>
     </div>
